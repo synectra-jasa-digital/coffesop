@@ -3,42 +3,43 @@
 namespace App\Livewire\Pos;
 
 use Livewire\Component;
+use App\Models\Product;
+use App\Models\Category;
 
 class MenuGrid extends Component
 {
-    public $products = [
-        ['id' => 1, 'name' => 'Cafe Latte', 'price' => 28000, 'category' => 'Kopi', 'image' => 'https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=300&auto=format&fit=crop'],
-        ['id' => 2, 'name' => 'Americano', 'price' => 20000, 'category' => 'Kopi', 'image' => 'https://images.unsplash.com/photo-1551030173-122aabc4489c?q=80&w=300&auto=format&fit=crop'],
-        ['id' => 3, 'name' => 'Caramel Macchiato', 'price' => 35000, 'category' => 'Kopi', 'image' => 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?q=80&w=300&auto=format&fit=crop'],
-        ['id' => 4, 'name' => 'Matcha Latte', 'price' => 30000, 'category' => 'Non-Kopi', 'image' => 'https://images.unsplash.com/photo-1515823662972-da6a2e4d3002?q=80&w=300&auto=format&fit=crop'],
-        ['id' => 5, 'name' => 'French Fries', 'price' => 25000, 'category' => 'Snack', 'image' => 'https://images.unsplash.com/photo-1576107232684-1279f390859f?q=80&w=300&auto=format&fit=crop'],
-        ['id' => 6, 'name' => 'Chicken Wings', 'price' => 30000, 'category' => 'Snack', 'image' => 'https://images.unsplash.com/photo-1569698134101-f16c06a44bf9?q=80&w=300&auto=format&fit=crop'],
-    ];
-
-    public $categories = ['Semua Menu', 'Kopi', 'Non-Kopi', 'Makanan', 'Snack'];
     public $activeCategory = 'Semua Menu';
 
-    public function filterCategory($category)
+    public function filterCategory($categoryName)
     {
-        $this->activeCategory = $category;
+        $this->activeCategory = $categoryName;
     }
 
     public function addToCart($productId)
     {
-        $product = collect($this->products)->firstWhere('id', $productId);
+        $product = Product::find($productId);
         if ($product) {
-            $this->dispatch('productAdded', product: $product);
+            $this->dispatch('productAdded', product: $product->toArray());
         }
     }
 
     public function render()
     {
-        $filteredProducts = collect($this->products);
+        $categoriesQuery = Category::all();
+        $categories = collect(['Semua Menu'])->concat($categoriesQuery->pluck('name'));
+
+        $productsQuery = Product::where('is_active', true)->with('category');
+        
         if ($this->activeCategory !== 'Semua Menu') {
-            $filteredProducts = $filteredProducts->where('category', $this->activeCategory);
+            $productsQuery->whereHas('category', function ($query) {
+                $query->where('name', $this->activeCategory);
+            });
         }
 
+        $filteredProducts = $productsQuery->get();
+
         return view('livewire.pos.menu-grid', [
+            'categories' => $categories,
             'filteredProducts' => $filteredProducts
         ]);
     }

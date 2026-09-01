@@ -14,11 +14,11 @@
         
         @if($orderType === 'dine-in')
         <div class="mt-3">
-            <select wire:model="tableId" class="w-full border-gray-300 rounded-sm text-sm focus:border-primary focus:ring-primary">
+            <select wire:model="tableId" class="w-full border-gray-300 rounded-sm text-sm focus:border-[#398263] focus:ring-[#398263]">
                 <option value="">Pilih Meja...</option>
-                <option value="1">Meja 01</option>
-                <option value="2">Meja 02</option>
-                <option value="3">Meja 03</option>
+                @foreach(\App\Models\Table::all() as $table)
+                    <option value="{{ $table->id }}">{{ $table->number }}</option>
+                @endforeach
             </select>
         </div>
         @endif
@@ -38,11 +38,11 @@
                 </div>
                 <div class="text-xs text-gray-500 mb-2">{{ $item['notes'] }}</div>
                 <div class="flex justify-between items-center mt-2">
-                    <button class="text-xs text-primary font-semibold">Edit Note</button>
+                    <button class="text-xs text-[#398263] font-semibold">Edit Note</button>
                     <div class="flex items-center gap-3">
                         <button wire:click="decrementQuantity({{ $index }})" class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200">-</button>
                         <span class="text-sm font-semibold">{{ $item['quantity'] }}</span>
-                        <button wire:click="incrementQuantity({{ $index }})" class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white hover:bg-[#2C6B4F]">+</button>
+                        <button wire:click="incrementQuantity({{ $index }})" class="w-6 h-6 rounded-full bg-[#398263] flex items-center justify-center text-white hover:bg-[#2C6B4F]">+</button>
                     </div>
                 </div>
             </div>
@@ -76,11 +76,11 @@
             @endif
             <div class="pt-2 border-t border-gray-100 flex justify-between items-center">
                 <span class="font-bold text-lg">Total</span>
-                <span class="font-bold text-xl text-primary">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                <span class="font-bold text-xl text-[#398263]">Rp {{ number_format($total, 0, ',', '.') }}</span>
             </div>
         </div>
         
-        <button class="w-full bg-primary hover:bg-[#2C6B4F] text-white font-bold py-4 rounded-sm transition-colors text-lg flex justify-between px-6 {{ count($items) === 0 ? 'opacity-50 cursor-not-allowed' : '' }}" {{ count($items) === 0 ? 'disabled' : '' }}>
+        <button wire:click="processCheckout" class="w-full bg-[#398263] hover:bg-[#2C6B4F] text-white font-bold py-4 rounded-sm transition-colors text-lg flex justify-between px-6 {{ count($items) === 0 ? 'opacity-50 cursor-not-allowed' : '' }}" {{ count($items) === 0 ? 'disabled' : '' }}>
             <span>Bayar</span>
             <span>Rp {{ number_format($total, 0, ',', '.') }}</span>
         </button>
