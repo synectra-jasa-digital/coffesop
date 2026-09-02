@@ -1,0 +1,7 @@
+D:\projek fullstack\coffeshop\AGENTS.md
+D:\projek fullstack\coffeshop\CLAUDE.md
+D:\projek fullstack\coffeshop\PRODUCT.md
+D:\projek fullstack\coffeshop\README.md
+D:\projek fullstack\coffeshop\public\robots.txt
+D:\projek fullstack\coffeshop\rules\PRD-Aplikasi-POS-Coffee-Shop.md
+D:\projek fullstack\coffeshop\rules\design.md

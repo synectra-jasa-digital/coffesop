@@ -1,0 +1,120 @@
+Communities: 124
+Gods: [
+  {
+    "id": "app_models_user_user",
+    "label": "User",
+    "degree": 58
+  },
+  {
+    "id": "app_models_product_product",
+    "label": "Product",
+    "degree": 33
+  },
+  {
+    "id": "app_models_category_category",
+    "label": "Category",
+    "degree": 28
+  },
+  {
+    "id": "app_models_ingredient_ingredient",
+    "label": "Ingredient",
+    "degree": 24
+  },
+  {
+    "id": "app_models_order_order",
+    "label": "Order",
+    "degree": 24
+  },
+  {
+    "id": "tests_testcase_testcase",
+    "label": "TestCase",
+    "degree": 18
+  },
+  {
+    "id": "app_models_recipe_recipe",
+    "label": "Recipe",
+    "degree": 12
+  },
+  {
+    "id": "app_models_table_table",
+    "label": "Table",
+    "degree": 12
+  },
+  {
+    "id": "app_models_recipeingredient_recipeingredient",
+    "label": "RecipeIngredient",
+    "degree": 11
+  },
+  {
+    "id": "app_models_shift_shift",
+    "label": "Shift",
+    "degree": 11
+  }
+]
+
+Surprises: [
+  {
+    "source": "Laravel Boost Guidelines",
+    "target": "Laravel Boost Guidelines",
+    "source_files": [
+      "CLAUDE.md",
+      "AGENTS.md"
+    ],
+    "confidence": "INFERRED",
+    "relation": "semantically_similar_to",
+    "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; semantically similar concepts with no structural link"
+  },
+  {
+    "source": "Premium Editorial UI",
+    "target": "Craft-First UI",
+    "source_files": [
+      "rules/design.md",
+      "PRODUCT.md"
+    ],
+    "confidence": "INFERRED",
+    "relation": "semantically_similar_to",
+    "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; semantically similar concepts with no structural link"
+  },
+  {
+    "source": "Real-Time KDS",
+    "target": "Real-Time Web Application",
+    "source_files": [
+      "README.md",
+      "rules/PRD-Aplikasi-POS-Coffee-Shop.md"
+    ],
+    "confidence": "INFERRED",
+    "relation": "semantically_similar_to",
+    "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; semantically similar concepts with no structural link"
+  },
+  {
+    "source": "BOM-Based Stock Deduction",
+    "target": "Real-Time KDS Updates",
+    "source_files": [
+      "rules/PRD-Aplikasi-POS-Coffee-Shop.md",
+      "PRODUCT.md"
+    ],
+    "confidence": "INFERRED",
+    "relation": "conceptually_related_to",
+    "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+  },
+  {
+    "source": "CategoryController",
+    "target": "Controller",
+    "source_files": [
+      "app/Http/Controllers/CategoryController.php",
+      "app/Http/Controllers/Controller.php"
+    ],
+    "confidence": "EXTRACTED",
+    "relation": "inherits",
+    "why": "bridges separate communities"
+  }
+]
+
+Questions:
+ - {'type': 'bridge_node', 'question': 'Why does `User` connect `Community 6` to `Community 32`, `Community 33`, `Community 5`, `Community 7`, `Community 8`, `Community 17`, `Community 18`, `Community 23`, `Community 27`?', 'why': 'High betweenness centrality (0.100) - this node is a cross-community bridge.'}
+ - {'type': 'bridge_node', 'question': 'Why does `Product` connect `Community 8` to `Community 0`, `Community 2`, `Community 5`, `Community 12`, `Community 13`, `Community 17`, `Community 19`, `Community 20`?', 'why': 'High betweenness centrality (0.045) - this node is a cross-community bridge.'}
+ - {'type': 'bridge_node', 'question': 'Why does `Category` connect `Community 12` to `Community 0`, `Community 5`, `Community 6`, `Community 8`, `Community 14`, `Community 17`, `Community 19`, `Community 20`?', 'why': 'High betweenness centrality (0.039) - this node is a cross-community bridge.'}
+ - {'type': 'isolated_nodes', 'question': 'What connects `$schema`, `name`, `type` to the rest of the system?', 'why': '123 weakly-connected nodes found - possible documentation gaps or missing edges.'}
+ - {'type': 'low_cohesion', 'question': 'Should `Community 0` be split into smaller, more focused modules?', 'why': 'Cohesion score 0.06717687074829932 - nodes in this community are weakly interconnected.'}
+ - {'type': 'low_cohesion', 'question': 'Should `Community 1` be split into smaller, more focused modules?', 'why': 'Cohesion score 0.043478260869565216 - nodes in this community are weakly interconnected.'}
+ - {'type': 'low_cohesion', 'question': 'Should `Community 2` be split into smaller, more focused modules?', 'why': 'Cohesion score 0.0761904761904762 - nodes in this community are weakly interconnected.'}

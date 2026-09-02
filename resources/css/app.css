@@ -8,8 +8,44 @@
     body {
         @apply font-sans text-gray-700 bg-[#FAFAFA] antialiased;
     }
-    
+
     h1, h2, h3, h4, h5, h6 {
-        @apply font-serif;
+        @apply font-serif text-ink;
+    }
+
+    /* Smooth scrolling for anchor navigation */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Respect reduced motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+}
+
+@layer utilities {
+    /* Hide scrollbar but keep scrollability */
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Flat focus ring substitute (no drop shadow) */
+    .focus-flat:focus {
+        @apply outline-none ring-2 ring-primary/30 ring-offset-0;
+    }
+
+    /* Subtle text balance for elegant wrapping */
+    .text-balance {
+        text-wrap: balance;
     }
 }

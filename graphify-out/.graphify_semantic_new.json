@@ -1,0 +1,604 @@
+{
+  "nodes": [
+    {
+      "id": "agents_laravel_application",
+      "label": "Laravel Application",
+      "file_type": "document",
+      "source_file": "D:\\projek fullstack\\coffeshop\\AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "agents_laravel_boost_guidelines",
+      "label": "Laravel Boost Guidelines",
+      "file_type": "rationale",
+      "source_file": "D:\\projek fullstack\\coffeshop\\AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "agents_php_and_composer_prerequisites",
+      "label": "PHP and Composer Prerequisites",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "agents_laravel_boost_installation",
+      "label": "Laravel Boost Installation",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_laravel_application",
+      "label": "Laravel Application",
+      "file_type": "document",
+      "source_file": "D:\\projek fullstack\\coffeshop\\CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_laravel_boost_guidelines",
+      "label": "Laravel Boost Guidelines",
+      "file_type": "rationale",
+      "source_file": "D:\\projek fullstack\\coffeshop\\CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "product_good_coffee_pos",
+      "label": "Good Coffee POS",
+      "file_type": "document",
+      "source_file": "D:\\projek fullstack\\coffeshop\\PRODUCT.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "product_livewire_tailwind_stack",
+      "label": "Livewire Tailwind Stack",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\PRODUCT.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "product_role_based_access",
+      "label": "Role-Based Access",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\PRODUCT.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "product_realtime_kds_updates",
+      "label": "Real-Time KDS Updates",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\PRODUCT.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "product_craft_first_ui",
+      "label": "Craft-First UI",
+      "file_type": "rationale",
+      "source_file": "D:\\projek fullstack\\coffeshop\\PRODUCT.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_good_coffee_pos_kds_system",
+      "label": "Good Coffee POS and KDS System",
+      "file_type": "document",
+      "source_file": "D:\\projek fullstack\\coffeshop\\README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_breeze_livewire_authentication",
+      "label": "Laravel Breeze Livewire Authentication",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_spatie_permission",
+      "label": "Spatie Laravel Permission",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_real_time_kds",
+      "label": "Real-Time KDS",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "robots_user_agent_all",
+      "label": "User-Agent Wildcard",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\public\\robots.txt",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "robots_disallow_none",
+      "label": "No Disallow Rules",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\public\\robots.txt",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "prd_pos_terpadu_coffee_shop",
+      "label": "Sistem POS Terpadu Coffee Shop",
+      "file_type": "document",
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\PRD-Aplikasi-POS-Coffee-Shop.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "prd_single_outlet_scope",
+      "label": "Single Outlet Scope",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\PRD-Aplikasi-POS-Coffee-Shop.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "prd_realtime_web_app",
+      "label": "Real-Time Web Application",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\PRD-Aplikasi-POS-Coffee-Shop.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "prd_bom_based_stock_deduction",
+      "label": "BOM-Based Stock Deduction",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\PRD-Aplikasi-POS-Coffee-Shop.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "prd_kitchen_display_system",
+      "label": "Kitchen Display System",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\PRD-Aplikasi-POS-Coffee-Shop.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "prd_role_based_access_control",
+      "label": "Role-Based Access Control",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\PRD-Aplikasi-POS-Coffee-Shop.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "design_good_coffee_landing_page",
+      "label": "Good Coffee Landing Page",
+      "file_type": "document",
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\design.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "design_premium_editorial_ui",
+      "label": "Premium Editorial UI",
+      "file_type": "rationale",
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\design.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "design_teal_green_palette",
+      "label": "Teal Green Palette",
+      "file_type": "concept",
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\design.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "design_whitespace_first_layout",
+      "label": "Whitespace-First Layout",
+      "file_type": "rationale",
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\design.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "design_flat_design_no_shadow",
+      "label": "Flat Design Without Shadows",
+      "file_type": "rationale",
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\design.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "agents_laravel_application",
+      "target": "agents_laravel_boost_guidelines",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\AGENTS.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "agents_laravel_boost_guidelines",
+      "target": "agents_php_and_composer_prerequisites",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\AGENTS.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "agents_laravel_boost_guidelines",
+      "target": "agents_laravel_boost_installation",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\AGENTS.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_laravel_application",
+      "target": "claude_laravel_boost_guidelines",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "claude_laravel_boost_guidelines",
+      "target": "agents_laravel_boost_guidelines",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "D:\\projek fullstack\\coffeshop\\CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "product_good_coffee_pos",
+      "target": "product_livewire_tailwind_stack",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\PRODUCT.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "product_good_coffee_pos",
+      "target": "product_role_based_access",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\PRODUCT.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "product_good_coffee_pos",
+      "target": "product_realtime_kds_updates",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\PRODUCT.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "product_craft_first_ui",
+      "target": "product_good_coffee_pos",
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "D:\\projek fullstack\\coffeshop\\PRODUCT.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_good_coffee_pos_kds_system",
+      "target": "readme_breeze_livewire_authentication",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_good_coffee_pos_kds_system",
+      "target": "readme_spatie_permission",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_good_coffee_pos_kds_system",
+      "target": "readme_real_time_kds",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_real_time_kds",
+      "target": "prd_realtime_web_app",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "D:\\projek fullstack\\coffeshop\\README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "robots_user_agent_all",
+      "target": "robots_disallow_none",
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\public\\robots.txt",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "prd_pos_terpadu_coffee_shop",
+      "target": "prd_single_outlet_scope",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\PRD-Aplikasi-POS-Coffee-Shop.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "prd_pos_terpadu_coffee_shop",
+      "target": "prd_realtime_web_app",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\PRD-Aplikasi-POS-Coffee-Shop.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "prd_pos_terpadu_coffee_shop",
+      "target": "prd_bom_based_stock_deduction",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\PRD-Aplikasi-POS-Coffee-Shop.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "prd_pos_terpadu_coffee_shop",
+      "target": "prd_kitchen_display_system",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\PRD-Aplikasi-POS-Coffee-Shop.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "prd_pos_terpadu_coffee_shop",
+      "target": "prd_role_based_access_control",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\PRD-Aplikasi-POS-Coffee-Shop.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "prd_bom_based_stock_deduction",
+      "target": "product_realtime_kds_updates",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\PRD-Aplikasi-POS-Coffee-Shop.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "design_good_coffee_landing_page",
+      "target": "design_premium_editorial_ui",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\design.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "design_good_coffee_landing_page",
+      "target": "design_teal_green_palette",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\design.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "design_good_coffee_landing_page",
+      "target": "design_whitespace_first_layout",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\design.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "design_good_coffee_landing_page",
+      "target": "design_flat_design_no_shadow",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\design.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "design_premium_editorial_ui",
+      "target": "product_craft_first_ui",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\design.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "design_whitespace_first_layout",
+      "target": "design_flat_design_no_shadow",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\design.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "pos_system_architecture",
+      "label": "POS System Architecture",
+      "nodes": [
+        "prd_pos_terpadu_coffee_shop",
+        "product_good_coffee_pos",
+        "readme_good_coffee_pos_kds_system"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\PRD-Aplikasi-POS-Coffee-Shop.md"
+    },
+    {
+      "id": "brand_design_alignment",
+      "label": "Brand Design Alignment",
+      "nodes": [
+        "product_craft_first_ui",
+        "design_premium_editorial_ui",
+        "design_teal_green_palette"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "D:\\projek fullstack\\coffeshop\\rules\\design.md"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

@@ -6,7 +6,12 @@ use Livewire\Component;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
+use App\Models\Recipe;
+use App\Models\Ingredient;
+use App\Models\StockMovement;
+use App\Models\Setting;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class Cart extends Component
 {
@@ -76,8 +81,16 @@ class Cart extends Component
     public function calculateTotals()
     {
         $this->subtotal = array_sum(array_column($this->items, 'subtotal'));
-        $this->taxAmount = $this->subtotal * 0.11; // 11% PPN
-        $this->total = $this->subtotal + $this->taxAmount - $this->discountAmount;
+
+        $settings = Setting::query()
+            ->whereIn('key', ['tax_enabled', 'tax_percentage'])
+            ->pluck('value', 'key');
+
+        $taxEnabled = filter_var($settings->get('tax_enabled', false), FILTER_VALIDATE_BOOLEAN);
+        $taxRate = max(0, (float) $settings->get('tax_percentage', 0)) / 100;
+
+        $this->taxAmount = $taxEnabled ? round($this->subtotal * $taxRate, 2) : 0;
+        $this->total = max(0, $this->subtotal + $this->taxAmount - $this->discountAmount);
     }
 
     public function processCheckout()
@@ -91,42 +104,100 @@ class Cart extends Component
             return;
         }
 
-        $order = Order::create([
-            'order_number' => 'ORD-' . strtoupper(Str::random(8)),
-            'user_id' => auth()->id(),
-            'table_id' => $this->orderType === 'dine-in' ? $this->tableId : null,
-            'type' => $this->orderType,
-            'status' => 'pending',
-            'payment_status' => 'paid',
-            'subtotal' => $this->subtotal,
-            'tax_amount' => $this->taxAmount,
-            'discount_amount' => $this->discountAmount,
-            'total' => $this->total,
-        ]);
+        $activeShift = \App\Models\Shift::where('user_id', auth()->id())
+            ->where('status', 'open')
+            ->first();
 
-        foreach ($this->items as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $item['product_id'],
-                'quantity' => $item['quantity'],
-                'price' => $item['price'],
-                'subtotal' => $item['subtotal'],
-                'notes' => $item['notes'],
-                'status' => 'pending'
-            ]);
-            
-            // Note: In real app, we would also trigger stock deduction based on Recipe/BOM here
+        if (!$activeShift) {
+            session()->flash('error', 'Tidak ada shift kasir yang aktif. Buka shift terlebih dahulu.');
+            return;
         }
 
-        Payment::create([
-            'order_id' => $order->id,
-            'payment_method' => 'cash', // Default to cash for now
-            'amount' => $this->total,
-            'status' => 'success',
-        ]);
+        DB::beginTransaction();
 
-        $this->clearCart();
-        // Disini bisa tambahkan trigger print struk
+        try {
+            $order = Order::create([
+                'order_number' => 'ORD-' . strtoupper(Str::random(8)),
+                'user_id' => auth()->id() ?? 1, // Fallback if not authenticated in dev
+                'shift_id' => $activeShift->id,
+                'table_id' => $this->orderType === 'dine-in' ? $this->tableId : null,
+                'type' => $this->orderType,
+                'status' => 'pending',
+                'payment_status' => 'paid',
+                'subtotal' => $this->subtotal,
+                'tax_amount' => $this->taxAmount,
+                'discount_amount' => $this->discountAmount,
+                'total' => $this->total,
+            ]);
+
+            foreach ($this->items as $item) {
+                $orderItem = OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item['product_id'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                    'subtotal' => $item['subtotal'],
+                    'notes' => $item['notes'],
+                    'status' => 'pending'
+                ]);
+
+                // Deduct stock based on recipe (BOM)
+                $recipe = Recipe::with('ingredients')->where('product_id', $item['product_id'])->first();
+
+                if ($recipe && $recipe->ingredients) {
+                    foreach ($recipe->ingredients as $recipeIngredient) {
+                        $qtyToDeduct = $recipeIngredient->quantity * $item['quantity'];
+
+                        $ingredient = Ingredient::query()
+                            ->lockForUpdate()
+                            ->find($recipeIngredient->ingredient_id);
+
+                        if (! $ingredient) {
+                            throw new \RuntimeException('Bahan baku untuk resep tidak ditemukan.');
+                        }
+
+                        if ((float) $ingredient->current_stock < $qtyToDeduct) {
+                            throw new \RuntimeException('Stok '.$ingredient->name.' tidak mencukupi.');
+                        }
+
+                        $ingredient->decrement('current_stock', $qtyToDeduct);
+
+                        StockMovement::create([
+                            'ingredient_id' => $ingredient->id,
+                            'user_id' => auth()->id(),
+                            'type' => 'out',
+                            'quantity' => $qtyToDeduct,
+                            'reference_type' => OrderItem::class,
+                            'reference_id' => $orderItem->id,
+                            'notes' => 'Penjualan POS - ' . $order->order_number
+                        ]);
+                    }
+                }
+            }
+
+            Payment::create([
+                'order_id' => $order->id,
+                'payment_method' => 'cash', // Default to cash for now
+                'amount' => $this->total,
+                'status' => 'success',
+            ]);
+
+            DB::commit();
+
+            // Set data for printing
+            $this->dispatch('printReceipt', order_id: $order->id);
+
+            $this->clearCart();
+            // Optional: Dispatch event for KDS (Kitchen Display System) update
+            $this->dispatch('orderCompleted', order_id: $order->id);
+
+            // Notification or flash message here (e.g. sweetalert)
+            session()->flash('message', 'Transaksi berhasil disimpan!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            session()->flash('error', 'Terjadi kesalahan saat memproses transaksi: ' . $e->getMessage());
+        }
     }
 
     public function render()
