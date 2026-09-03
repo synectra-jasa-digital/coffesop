@@ -20,6 +20,8 @@ class Index extends Component
     public $stockInIngredientId;
     public $stockInQuantity;
     public $stockInNotes;
+    public $stockInUnitCost = 0;
+    public $stockInExpiryDate = '';
 
     // Stock Opname
     public $showOpnameModal = false;
@@ -34,6 +36,8 @@ class Index extends Component
         'stockInIngredientId' => 'required|exists:ingredients,id',
         'stockInQuantity' => 'required|numeric|min:0.1',
         'stockInNotes' => 'nullable|string',
+        'stockInUnitCost' => 'required|numeric|min:0',
+        'stockInExpiryDate' => 'nullable|date',
     ];
 
     public function openAddIngredient()
@@ -65,28 +69,29 @@ class Index extends Component
 
     public function openStockIn()
     {
-        $this->reset(['stockInIngredientId', 'stockInQuantity', 'stockInNotes']);
+        $this->reset(['stockInIngredientId', 'stockInQuantity', 'stockInNotes', 'stockInUnitCost', 'stockInExpiryDate']);
         $this->resetValidation();
         $this->showStockInModal = true;
     }
 
     public function processStockIn()
     {
-        $this->validate([
-            'stockInIngredientId' => 'required|exists:ingredients,id',
-            'stockInQuantity' => 'required|numeric|min:0.1',
-            'stockInNotes' => 'nullable|string',
-        ]);
+        $this->validate();
 
         $ingredient = Ingredient::find($this->stockInIngredientId);
         $before = (float) $ingredient->current_stock;
         $ingredient->increment('current_stock', $this->stockInQuantity);
+
+        $totalCost = $this->stockInQuantity * $this->stockInUnitCost;
 
         StockMovement::create([
             'ingredient_id' => $this->stockInIngredientId,
             'user_id' => auth()->id(),
             'type' => 'in',
             'quantity' => $this->stockInQuantity,
+            'unit_cost' => $this->stockInUnitCost,
+            'expiry_date' => $this->stockInExpiryDate ?: null,
+            'total_cost' => $totalCost,
             'notes' => $this->stockInNotes ?: 'Penerimaan barang'
         ]);
 

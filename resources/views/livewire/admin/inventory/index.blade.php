@@ -76,6 +76,20 @@
                     <x-input-label for="stockInNotes" value="Catatan / Nomor Faktur" />
                     <textarea id="stockInNotes" wire:model="stockInNotes" class="mt-1 block w-full border-gray-300 focus:border-[#398263] focus:ring-[#398263] rounded-sm shadow-sm text-sm" rows="2"></textarea>
                 </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <x-input-label for="stockInUnitCost" value="Harga Beli per Satuan (Rp)" />
+                        <x-text-input id="stockInUnitCost" type="number" step="0.01" class="mt-1 block w-full" wire:model="stockInUnitCost" />
+                        <x-input-error :messages="$errors->get('stockInUnitCost')" class="mt-2" />
+                    </div>
+                    <div>
+                        <x-input-label for="stockInExpiryDate" value="Kedaluwarsa (Opsional)" />
+                        <x-text-input id="stockInExpiryDate" type="date" class="mt-1 block w-full" wire:model="stockInExpiryDate" />
+                        <x-input-error :messages="$errors->get('stockInExpiryDate')" class="mt-2" />
+                    </div>
+                </div>
+
                 <div class="flex justify-end mt-6 gap-3">
                     <button type="button" wire:click="$set('showStockInModal', false)" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-sm font-semibold text-xs text-gray-700 uppercase hover:bg-gray-50">Batal</button>
                     <x-ui.button type="submit">Simpan Stok</x-ui.button>
