@@ -3,11 +3,10 @@
 namespace App\Notifications;
 
 use App\Models\Ingredient;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Notifications\Notification;
 
-class LowStockNotification implements ShouldBroadcast
+class LowStockNotification extends Notification
 {
     public Collection $ingredients;
 
@@ -18,7 +17,7 @@ class LowStockNotification implements ShouldBroadcast
 
     public function via($notifiable): array
     {
-        return ['database', 'broadcast'];
+        return ['database'];
     }
 
     public function toDatabase($notifiable): array
@@ -38,15 +37,5 @@ class LowStockNotification implements ShouldBroadcast
                 'unit' => $i->unit,
             ]),
         ];
-    }
-
-    public function broadcastOn()
-    {
-        return new Channel('notifications.global');
-    }
-
-    public function broadcastWith($notifiable): array
-    {
-        return $this->toArray($notifiable);
     }
 }

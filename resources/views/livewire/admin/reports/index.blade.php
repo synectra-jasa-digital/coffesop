@@ -8,9 +8,10 @@
                 <select wire:model.live="reportType" class="border-gray-300 rounded-sm text-sm focus:border-[#398263] focus:ring-[#398263] py-2 pl-3 pr-8">
                     <option value="sales_daily">Penjualan Harian</option>
                     <option value="sales_period">Penjualan Periode</option>
-                    <option value="stock">Laporan Stok</option>
+<option value="stock">Laporan Stok</option>
+                    <option value="cashier_shift">Kinerja Kasir per Shift</option>
                 </select>
-                
+
                 @if($reportType === 'sales_daily')
                     <input type="date" wire:model.live="dateFilter" class="border-gray-300 rounded-sm text-sm focus:border-[#398263] focus:ring-[#398263] py-2 px-3">
                 @endif
@@ -22,13 +23,37 @@
                         <input type="date" wire:model.live="endDate" class="border-gray-300 rounded-sm text-sm focus:border-[#398263] focus:ring-[#398263] py-2 px-3 w-36">
                     </div>
                 @endif
+
+                @if($reportType === 'cashier_shift')
+                    <select wire:model.live="selectedCashierId" class="border-gray-300 rounded-sm text-sm focus:border-[#398263] focus:ring-[#398263] py-2 pl-3 pr-8">
+                        <option value="">Semua Kasir</option>
+                        @foreach($cashiers as $c)
+                            <option value="{{ $c->id }}">{{ $c->name }}</option>
+                        @endforeach
+                    </select>
+                @endif
                 
-                <x-ui.button variant="outline" onclick="window.print()">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 mr-2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                    </svg>
-                    Cetak PDF
-                </x-ui.button>
+                @if(in_array($reportType, ['sales_daily', 'sales_period']))
+                    <x-ui.button variant="outline" wire:click="exportExcel">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 mr-2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+                        Excel
+                    </x-ui.button>
+                    <x-ui.button variant="outline" wire:click="exportPdf">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 mr-2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+                        PDF
+                    </x-ui.button>
+                @elseif($reportType === 'stock')
+                    <x-ui.button variant="outline" wire:click="exportStockPdf">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 mr-2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+                        Cetak PDF Stok
+                    </x-ui.button>
+                @endif
             </div>
         </div>
     </x-slot>
@@ -124,6 +149,51 @@
                     @empty
                         <x-ui.table-row>
                             <x-ui.table-cell colspan="5" class="text-center text-gray-500 py-8">Tidak ada data bahan baku.</x-ui.table-cell>
+                        </x-ui.table-row>
+                    @endforelse
+                </x-ui.table>
+            </x-ui.card>
+        @elseif($reportType === 'cashier_shift')
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <x-ui.card>
+                    <div class="text-gray-500 text-sm mb-1">Total Shift</div>
+                    <div class="text-3xl font-bold text-gray-800">{{ number_format(count($cashierData ?? []), 0, ',', '.') }}</div>
+                </x-ui.card>
+                <x-ui.card>
+                    <div class="text-gray-500 text-sm mb-1">Total Transaksi</div>
+                    <div class="text-3xl font-bold text-gray-800">{{ number_format(collect($cashierData ?? [])->sum('total_transactions'), 0, ',', '.') }}</div>
+                </x-ui.card>
+                <x-ui.card>
+                    <div class="text-gray-500 text-sm mb-1">Total Pencairan</div>
+                    <div class="text-3xl font-bold text-[#398263]">Rp {{ number_format(collect($cashierData ?? [])->sum('total_sales'), 0, ',', '.') }}</div>
+                </x-ui.card>
+                <x-ui.card>
+                    <div class="text-gray-500 text-sm mb-1">Selisih Kas (Kurang)</div>
+                    <div class="text-3xl font-bold text-red-700">Rp {{ number_format(collect($cashierData ?? [])->sum('difference'), 0, ',', '.') }}</div>
+                </x-ui.card>
+            </div>
+
+            <x-ui.card padding="p-0" class="overflow-hidden">
+                <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                    <h3 class="font-bold text-gray-800 text-lg">Riwayat Shift (Sudah Tutup)</h3>
+                </div>
+                <x-ui.table :headers="['Kasir', 'Mulai', 'Selesai', 'Modal', 'Kas Akhir', 'Transaksi', 'Selisih', 'Catatan']">
+                    @forelse($cashierData ?? [] as $row)
+                        <x-ui.table-row class="{{ $row['difference'] < 0 ? 'bg-red-50/30' : '' }}">
+                            <x-ui.table-cell class="font-medium">{{ $row['user_name'] }}</x-ui.table-cell>
+                            <x-ui.table-cell class="text-xs">{{ $row['start_time'] }}</x-ui.table-cell>
+                            <x-ui.table-cell class="text-xs">{{ $row['end_time'] }}</x-ui.table-cell>
+                            <x-ui.table-cell>Rp {{ number_format($row['starting_cash'], 0, ',', '.') }}</x-ui.table-cell>
+                            <x-ui.table-cell>Rp {{ number_format($row['ending_cash'], 0, ',', '.') }}</x-ui.table-cell>
+                            <x-ui.table-cell>{{ $row['total_transactions'] }}</x-ui.table-cell>
+                            <x-ui.table-cell class="{{ $row['difference'] < 0 ? 'text-red-600 font-bold' : ($row['difference'] > 0 ? 'text-yellow-600' : 'text-green-600') }}">
+                                Rp {{ number_format($row['difference'], 0, ',', '.') }}
+                            </x-ui.table-cell>
+                            <x-ui.table-cell class="text-xs text-gray-500">{{ $row['notes'] ?? '-' }}</x-ui.table-cell>
+                        </x-ui.table-row>
+                    @empty
+                        <x-ui.table-row>
+                            <x-ui.table-cell colspan="8" class="text-center text-gray-500 py-8">Belum ada shift yang ditutup.</x-ui.table-cell>
                         </x-ui.table-row>
                     @endforelse
                 </x-ui.table>

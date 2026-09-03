@@ -127,9 +127,30 @@
             </div>
             @endif
 
+            @if(count($payments) > 0)
+            <div class="mt-3 space-y-1 text-sm border-t border-line pt-3">
+                <div class="flex justify-between text-xs text-gray-500">
+                    <span>Metode Pembayaran</span>
+                    <span>Sisa: Rp {{ number_format($this->getRemainingPayment(), 0, ',', '.') }}</span>
+                </div>
+                @foreach($payments as $index => $line)
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-gray-700">{{ ucfirst(str_replace('_', ' ', $line['method'])) }}</span>
+                    <span class="font-medium flex items-center gap-2">
+                        Rp {{ number_format($line['amount'], 0, ',', '.') }}
+                        <button wire:click="removePayment({{ $index }})" class="text-gray-400 hover:text-red-500 text-xs">Hapus</button>
+                    </span>
+                </div>
+                @endforeach
+            </div>
+            @endif
+
             <div class="flex gap-2 mt-4">
                 <button wire:click="openDiscountModal" class="flex-1 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-sm hover:bg-gray-50 transition-colors">
                     + Diskon
+                </button>
+                <button wire:click="openPaymentModal" class="flex-1 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-sm hover:bg-gray-50 transition-colors">
+                    + Bayar
                 </button>
                 <button wire:click="processCheckout" class="flex-2 relative overflow-hidden bg-primary hover:bg-primary-hover text-white font-bold py-2.5 rounded-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/30 group {{ $isDisabled ? 'opacity-50 cursor-not-allowed' : '' }}" {{ $isDisabled ? 'disabled' : '' }}>
                     <div class="flex items-center justify-center gap-2">
@@ -189,6 +210,43 @@
                     </button>
                     <x-ui.button type="submit">
                         Terapkan
+                    </x-ui.button>
+                </div>
+            </form>
+        </div>
+    </x-modal>
+
+    <!-- Payment / Split Payment Modal -->
+    <x-modal wire:model.live="showPaymentModal" maxWidth="sm" :show="$showPaymentModal">
+        <div class="p-6">
+            <h2 class="text-lg font-bold font-serif text-gray-900 mb-2">Tambah Pembayaran</h2>
+            <p class="text-sm text-gray-500 mb-6">Sisa tagihan: <strong class="text-primary">Rp {{ number_format($this->getRemainingProperty(), 0, ',', '.') }}</strong></p>
+
+            <form wire:submit="addPayment" class="space-y-4">
+                <div>
+                    <x-input-label for="paymentMethod" value="Metode Pembayaran" />
+                    <select id="paymentMethod" wire:model="paymentMethod" class="mt-1 block w-full border-gray-300 focus:border-[#398263] focus:ring-[#398263] rounded-sm shadow-sm">
+                        <option value="cash">Tunai (Cash)</option>
+                        <option value="qris">QRIS</option>
+                        <option value="ewallet">E-Wallet</option>
+                        <option value="bank_transfer">Transfer Bank</option>
+                        <option value="card">Kartu Debit/Kredit</option>
+                    </select>
+                    <x-input-error :messages="$errors->get('paymentMethod')" class="mt-2" />
+                </div>
+
+                <div>
+                    <x-input-label for="paymentAmount" value="Nominal (Rp)" />
+                    <x-text-input id="paymentAmount" type="number" step="0.01" class="mt-1 block w-full" wire:model="paymentAmount" min="0.01" />
+                    <x-input-error :messages="$errors->get('paymentAmount')" class="mt-2" />
+                </div>
+
+                <div class="flex justify-end mt-6 gap-3">
+                    <button type="button" wire:click="$set('showPaymentModal', false)" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-sm font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-50">
+                        Batal
+                    </button>
+                    <x-ui.button type="submit">
+                        Tambah
                     </x-ui.button>
                 </div>
             </form>

@@ -18,4 +18,42 @@ class Discount extends Model
         'start_date' => 'datetime',
         'end_date' => 'datetime',
     ];
+
+    /**
+     * Whether the promo is currently active (active flag + date window).
+     */
+    public function isActive(): bool
+    {
+        if (! $this->is_active) {
+            return false;
+        }
+
+        $now = now();
+
+        if ($this->start_date && $now->lt($this->start_date)) {
+            return false;
+        }
+
+        if ($this->end_date && $now->gt($this->end_date)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Calculate the discount amount for a given subtotal.
+     */
+    public function calculate(float $subtotal): float
+    {
+        if ($subtotal < (float) $this->minimum_purchase) {
+            return 0;
+        }
+
+        if ($this->type === 'percentage') {
+            return round($subtotal * ((float) $this->value / 100), 2);
+        }
+
+        return min((float) $this->value, $subtotal);
+    }
 }

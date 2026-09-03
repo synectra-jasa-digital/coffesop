@@ -7,6 +7,7 @@ use App\Livewire\Admin\Products\Index as AdminProductsIndex;
 use App\Livewire\Admin\Inventory\Index as AdminInventoryIndex;
 use App\Livewire\Admin\Reports\Index as AdminReportsIndex;
 use App\Livewire\Admin\Suppliers\Index as AdminSuppliersIndex;
+use App\Livewire\Admin\Discounts\Index as AdminDiscountsIndex;
 
 Route::view('/', 'welcome');
 
@@ -45,6 +46,11 @@ Route::middleware(['auth'])->group(function () {
     // Suppliers - Manager, Owner
     Route::middleware(['role:Manager/Supervisor|Owner/Admin'])->group(function () {
         Route::get('/admin/suppliers', AdminSuppliersIndex::class)->name('admin.suppliers.index');
+    });
+
+    // Discounts / Promo - Manager, Owner
+    Route::middleware(['role:Manager/Supervisor|Owner/Admin'])->group(function () {
+        Route::get('/admin/discounts', AdminDiscountsIndex::class)->name('admin.discounts.index');
     });
 
     // Reports - Manager, Owner

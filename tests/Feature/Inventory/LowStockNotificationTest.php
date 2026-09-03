@@ -4,10 +4,10 @@ namespace Tests\Feature\Inventory;
 
 use App\Jobs\CheckLowStock;
 use App\Models\Ingredient;
-use App\Models\Notification;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class LowStockNotificationTest extends TestCase
@@ -57,9 +57,11 @@ class LowStockNotificationTest extends TestCase
             'notifiable_type' => User::class,
         ]);
 
-        $notification = Notification::where('notifiable_id', $this->manager->id)->first();
-        $this->assertNotNull($notification);
-        $data = json_decode($notification->data, true);
+        $row = DB::table('notifications')
+            ->where('notifiable_id', $this->manager->id)
+            ->first();
+        $this->assertNotNull($row);
+        $data = json_decode($row->data, true);
         $this->assertStringContainsString('Biji Kopi', json_encode($data));
     }
 

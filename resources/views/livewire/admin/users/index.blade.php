@@ -18,7 +18,7 @@
         @endif
 
         <x-ui.card padding="p-0" class="overflow-hidden">
-            <x-ui.table :headers="['Nama', 'Email', 'Role (Akses)', 'Aksi']">
+            <x-ui.table :headers="['Nama', 'Email', 'Role (Akses)', 'Status', 'Aksi']">
                 @foreach($users as $user)
                 <x-ui.table-row>
                     <x-ui.table-cell class="font-medium">{{ $user->name }}</x-ui.table-cell>
@@ -36,7 +36,21 @@
                         <x-ui.badge :variant="$variant">{{ $roleName }}</x-ui.badge>
                     </x-ui.table-cell>
                     <x-ui.table-cell>
-                        <button wire:click="edit({{ $user->id }})" class="text-primary hover:underline text-sm font-semibold">Edit</button>
+                        @if($user->is_active)
+                            <x-ui.badge variant="success">Aktif</x-ui.badge>
+                        @else
+                            <x-ui.badge variant="default">Nonaktif</x-ui.badge>
+                        @endif
+                    </x-ui.table-cell>
+                    <x-ui.table-cell>
+                        <div class="flex gap-3">
+                            <button wire:click="edit({{ $user->id }})" class="text-primary hover:underline text-sm font-semibold">Edit</button>
+                            @if($user->id !== auth()->id())
+                                <button wire:click="toggleStatus({{ $user->id }})" class="text-blue-600 hover:underline text-sm font-semibold">
+                                    {{ $user->is_active ? 'Nonaktif' : 'Aktif' }}
+                                </button>
+                            @endif
+                        </div>
                     </x-ui.table-cell>
                 </x-ui.table-row>
                 @endforeach
@@ -84,6 +98,11 @@
                 <div>
                     <x-input-label for="password_confirmation" value="Konfirmasi Password" />
                     <x-text-input id="password_confirmation" type="password" class="mt-1 block w-full" wire:model="password_confirmation" />
+                </div>
+
+                <div class="flex items-center mt-2">
+                    <input id="is_active" type="checkbox" wire:model="is_active" class="rounded border-gray-300 text-[#398263] shadow-sm focus:ring-[#398263]">
+                    <label for="is_active" class="ml-2 text-sm text-gray-600">Akun Aktif (bisa login)</label>
                 </div>
 
                 <div class="flex justify-end mt-6 gap-3 pt-4">

@@ -33,6 +33,12 @@ class Cart extends Component
     public $showDiscountModal = false;
     public $managerCode = '';
 
+    // Payment / split-payment flow
+    public $payments = [];
+    public $showPaymentModal = false;
+    public $paymentMethod = 'cash';
+    public $paymentAmount;
+
     protected $listeners = ['productAdded' => 'addToCart'];
 
     public function addToCart($product)
@@ -85,6 +91,7 @@ class Cart extends Component
     {
         $this->items = [];
         $this->discountAmount = 0;
+        $this->payments = [];
         $this->calculateTotals();
     }
 
@@ -119,12 +126,6 @@ class Cart extends Component
 
     /**
      * Apply a manual discount to the current cart.
-     *
-     * Rules:
-     * - Discount must be a positive number.
-     * - Discount cannot exceed the subtotal.
-     * - If discount exceeds the configured auto-approval limit, the current
-     *   user must either be a Manager/Owner OR must provide a valid manager code.
      */
     public function applyDiscount()
     {
@@ -153,8 +154,6 @@ class Cart extends Component
                 $this->dispatch('focus-input', id: 'managerCode');
                 return;
             } else {
-                // Verify manager code (simple shared secret; in production this
-                // should be a per-user token or a real approval flow).
                 $expectedCode = config('app.discount_manager_code', 'MANAGER123');
                 if (! hash_equals((string) $expectedCode, (string) $this->managerCode)) {
                     session()->flash('error', 'Kode Manager tidak valid.');
@@ -185,6 +184,75 @@ class Cart extends Component
         session()->flash('message', 'Diskon dibatalkan.');
     }
 
+    /**
+     * Open the split-payment modal with the remaining balance as default amount.
+     */
+    public function openPaymentModal()
+    {
+        $this->reset(['paymentMethod', 'paymentAmount']);
+        $this->paymentMethod = 'cash';
+        $this->paymentAmount = $this->getRemainingPayment();
+        $this->showPaymentModal = true;
+    }
+
+    /**
+     * Add a payment line to the cart.
+     */
+    public function addPayment()
+    {
+        $this->validate([
+            'paymentMethod' => 'required|in:cash,qris,ewallet,bank_transfer,card',
+            'paymentAmount' => 'required|numeric|min:0.01',
+        ]);
+
+        $remaining = $this->getRemainingPayment();
+        if ((float) $this->paymentAmount > $remaining + 0.01) {
+            session()->flash('error', 'Jumlah pembayaran melebihi sisa tagihan.');
+            return;
+        }
+
+        $this->payments[] = [
+            'method' => $this->paymentMethod,
+            'amount' => (float) $this->paymentAmount,
+        ];
+
+        $this->showPaymentModal = false;
+        session()->flash('message', 'Pembayaran ' . $this->paymentMethodLabel() . ' ditambahkan.');
+    }
+
+    public function removePayment($index)
+    {
+        unset($this->payments[$index]);
+        $this->payments = array_values($this->payments);
+    }
+
+    public function getPaidTotalProperty(): float
+    {
+        return array_sum(array_column($this->payments, 'amount'));
+    }
+
+    public function getRemainingPayment(): float
+    {
+        return max(0, $this->total - $this->getPaidTotalProperty());
+    }
+
+    public function getRemainingProperty(): float
+    {
+        return $this->getRemainingPayment();
+    }
+
+    protected function paymentMethodLabel(): string
+    {
+        return match ($this->paymentMethod) {
+            'cash' => 'Tunai',
+            'qris' => 'QRIS',
+            'ewallet' => 'E-Wallet',
+            'bank_transfer' => 'Transfer Bank',
+            'card' => 'Kartu',
+            default => ucfirst($this->paymentMethod),
+        };
+    }
+
     public function processCheckout()
     {
         if (empty($this->items)) {
@@ -192,7 +260,6 @@ class Cart extends Component
         }
 
         if ($this->orderType === 'dine-in' && empty($this->tableId)) {
-            // Need to select table
             return;
         }
 
@@ -205,12 +272,19 @@ class Cart extends Component
             return;
         }
 
+        // Validate split payment: must total the order amount.
+        $paid = $this->getPaidTotalProperty();
+        if (empty($this->payments) || $paid + 0.01 < $this->total) {
+            session()->flash('error', 'Pembayaran belum lengkap. Tambah metode pembayaran hingga menutup total.');
+            return;
+        }
+
         DB::beginTransaction();
 
         try {
             $order = Order::create([
                 'order_number' => 'ORD-' . strtoupper(Str::random(8)),
-                'user_id' => auth()->id() ?? 1, // Fallback if not authenticated in dev
+                'user_id' => auth()->id() ?? 1,
                 'shift_id' => $activeShift->id,
                 'table_id' => $this->orderType === 'dine-in' ? $this->tableId : null,
                 'type' => $this->orderType,
@@ -234,7 +308,6 @@ class Cart extends Component
                     'status' => 'pending'
                 ]);
 
-                // Deduct stock based on recipe (BOM)
                 $recipe = Recipe::with('ingredients')->where('product_id', $item['product_id'])->first();
 
                 if ($recipe && $recipe->ingredients) {
@@ -268,26 +341,25 @@ class Cart extends Component
                 }
             }
 
-            Payment::create([
-                'order_id' => $order->id,
-                'payment_method' => 'cash', // Default to cash for now
-                'amount' => $this->total,
-                'status' => 'success',
-            ]);
+            // Save each payment line.
+            foreach ($this->payments as $line) {
+                Payment::create([
+                    'order_id' => $order->id,
+                    'payment_method' => $line['method'],
+                    'amount' => $line['amount'],
+                    'status' => 'success',
+                ]);
+            }
 
             DB::commit();
 
-            // Set data for printing
             $this->dispatch('printReceipt', order_id: $order->id);
 
             $this->clearCart();
-            // Optional: Dispatch event for KDS (Kitchen Display System) update
             $this->dispatch('orderCompleted', order_id: $order->id);
 
-            // Broadcast to the KDS channel in real time.
             broadcast(new OrderCreated($order))->toOthers();
 
-            // Audit trail: record who created the order and the final totals.
             ActivityLog::log('checkout', $order, null, [
                 'order_number' => $order->order_number,
                 'subtotal' => $this->subtotal,
@@ -295,10 +367,9 @@ class Cart extends Component
                 'service_charge_amount' => $this->serviceChargeAmount,
                 'discount_amount' => $this->discountAmount,
                 'total' => $this->total,
-                'payment_method' => 'cash',
+                'payment_methods' => array_column($this->payments, 'method'),
             ]);
 
-            // Notification or flash message here (e.g. sweetalert)
             session()->flash('message', 'Transaksi sudah disimpan!');
 
         } catch (\Exception $e) {
