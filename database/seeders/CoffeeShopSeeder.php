@@ -65,6 +65,8 @@ class CoffeeShopSeeder extends Seeder
             ['key' => 'tax_percentage', 'value' => '11', 'type' => 'number', 'group' => 'tax'],
             ['key' => 'service_charge_enabled', 'value' => 'false', 'type' => 'boolean', 'group' => 'tax'],
             ['key' => 'service_charge_percentage', 'value' => '5', 'type' => 'number', 'group' => 'tax'],
+            ['key' => 'discount_auto_approval_limit', 'value' => '10000', 'type' => 'number', 'group' => 'discount'],
+            ['key' => 'discount_require_manager_code', 'value' => 'true', 'type' => 'boolean', 'group' => 'discount'],
         ];
         foreach ($settings as $setting) {
             Setting::updateOrCreate(['key' => $setting['key']], $setting);

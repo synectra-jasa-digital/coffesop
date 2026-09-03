@@ -11,7 +11,12 @@ class StockMovement extends Model
 
     protected $fillable = [
         'ingredient_id', 'user_id', 'type', 'quantity',
-        'reference_type', 'reference_id', 'notes'
+        'reference_type', 'reference_id', 'notes',
+        'unit_cost', 'expiry_date', 'total_cost',
+    ];
+
+    protected $casts = [
+        'expiry_date' => 'date',
     ];
 
     public function ingredient()

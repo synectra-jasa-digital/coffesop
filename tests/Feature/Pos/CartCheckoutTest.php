@@ -116,13 +116,14 @@ class CartCheckoutTest extends TestCase
         );
     }
 
-    public function test_checkout_succeeds_and_reads_tax_from_settings(): void
+public function test_checkout_succeeds_and_reads_tax_from_settings(): void
     {
         $this->actingAs($this->cashier);
 
         // Set the tax to 5% in settings and ensure the cart honours it.
         Setting::updateOrCreate(['key' => 'tax_enabled'], ['value' => 'true', 'type' => 'boolean', 'group' => 'tax']);
         Setting::updateOrCreate(['key' => 'tax_percentage'], ['value' => '5', 'type' => 'number', 'group' => 'tax']);
+        Setting::updateOrCreate(['key' => 'service_charge_enabled'], ['value' => 'false', 'type' => 'boolean', 'group' => 'tax']);
 
         $this->ingredient->update(['current_stock' => 1000]);
 
@@ -142,9 +143,10 @@ class CartCheckoutTest extends TestCase
                 'image' => null,
             ]);
 
-        // subtotal = 25000, tax 5% = 1250, total = 26250
+        // subtotal = 25000, tax 5% = 1250, service charge disabled = 0, total = 26250
         $component->assertSet('subtotal', 25000)
             ->assertSet('taxAmount', 1250)
+            ->assertSet('serviceChargeAmount', 0)
             ->assertSet('total', 26250);
 
         $component->call('processCheckout');
@@ -157,12 +159,55 @@ class CartCheckoutTest extends TestCase
         $this->assertSame(
             900.0,
             (float) $this->ingredient->fresh()->current_stock,
-            'Stok harus berkurang 100g setelah checkout berhasil.'
+            'Stok harus berkurang 100g setelah checkout baru.'
         );
 
         $order = \App\Models\Order::first();
         $this->assertSame(26250.0, (float) $order->total);
         $this->assertSame(1250.0, (float) $order->tax_amount);
+        $this->assertSame(0.0, (float) $order->service_charge_amount);
+    }
+
+    public function test_service_charge_is_applied_when_enabled_in_settings(): void
+    {
+        $this->actingAs($this->cashier);
+
+        // Enable both tax (11%) and service charge (5%).
+        Setting::updateOrCreate(['key' => 'tax_enabled'], ['value' => 'true', 'type' => 'boolean', 'group' => 'tax']);
+        Setting::updateOrCreate(['key' => 'tax_percentage'], ['value' => '11', 'type' => 'number', 'group' => 'tax']);
+        Setting::updateOrCreate(['key' => 'service_charge_enabled'], ['value' => 'true', 'type' => 'boolean', 'group' => 'tax']);
+        Setting::updateOrCreate(['key' => 'service_charge_percentage'], ['value' => '5', 'type' => 'number', 'group' => 'tax']);
+
+        $this->ingredient->update(['current_stock' => 1000]);
+
+        Shift::create([
+            'user_id' => $this->cashier->id,
+            'start_time' => Carbon::now(),
+            'starting_cash' => 0,
+            'status' => 'open',
+        ]);
+
+        $component = Livewire::test(\App\Livewire\Pos\Cart::class)
+            ->set('orderType', 'take-away')
+            ->call('addToCart', [
+                'id' => $this->product->id,
+                'name' => $this->product->name,
+                'price' => (float) $this->product->price,
+                'image' => null,
+            ]);
+
+        // subtotal = 25000, tax 11% = 2750, service charge 5% = 1250, total = 29000
+        $component->assertSet('subtotal', 25000)
+            ->assertSet('taxAmount', 2750)
+            ->assertSet('serviceChargeAmount', 1250)
+            ->assertSet('total', 29000);
+
+        $component->call('processCheckout');
+
+        $order = \App\Models\Order::first();
+        $this->assertSame(29000.0, (float) $order->total);
+        $this->assertSame(2750.0, (float) $order->tax_amount);
+        $this->assertSame(1250.0, (float) $order->service_charge_amount);
     }
 
     public function test_seeder_creates_user_with_password_using_settings_value(): void

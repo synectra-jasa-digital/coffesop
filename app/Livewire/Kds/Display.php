@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Events\OrderStatusUpdated;
 
 #[Layout('layouts.kds')]
 class Display extends Component
@@ -16,11 +17,14 @@ class Display extends Component
         if ($order) {
             $order->status = $status;
             $order->save();
-            
+
             // Also update all items if order is completed
             if ($status === 'completed') {
                 $order->items()->update(['status' => 'served']);
             }
+
+            // Broadcast the status change to the KDS channel in real time.
+            broadcast(new OrderStatusUpdated($order))->toOthers();
         }
     }
 

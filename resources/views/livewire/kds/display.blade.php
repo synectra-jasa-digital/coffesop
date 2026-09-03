@@ -1,4 +1,4 @@
-<div class="h-full flex flex-col bg-gray-100" x-data="{ refreshInterval: null }" wire:poll.10s>
+<div class="h-full flex flex-col bg-gray-100" x-data="{ refreshInterval: null }" x-init="$nextTick(() => { window.Echo && window.Echo.channel('kds').listen('OrderCreated', (e) => { $wire.$refresh(); }); window.Echo && window.Echo.channel('kds').listen('OrderStatusUpdated', (e) => { $wire.$refresh(); }); })">
     <!-- Header -->
     <div class="h-16 bg-white border-b border-line flex items-center justify-between px-6 shrink-0">
         <div class="flex items-center gap-4">

@@ -8,6 +8,7 @@ use App\Models\Ingredient;
 use App\Models\StockMovement;
 use App\Models\StockOpname;
 use App\Models\StockOpnameDetail;
+use App\Models\ActivityLog;
 use Carbon\Carbon;
 
 class Index extends Component
@@ -50,14 +51,15 @@ class Index extends Component
             'newIngMinStock' => 'required|numeric|min:0',
         ]);
 
-        Ingredient::create([
+        $ingredient = Ingredient::create([
             'name' => $this->newIngName,
             'unit' => $this->newIngUnit,
             'minimum_stock' => $this->newIngMinStock,
             'current_stock' => 0,
         ]);
 
-        session()->flash('message', 'Bahan baku baru berhasil ditambahkan.');
+        session()->flash('message', 'Bahan baku baru sudah ditambahkan.');
+        ActivityLog::log('create_ingredient', $ingredient, null, $ingredient->only(['name', 'unit', 'minimum_stock', 'current_stock']));
         $this->showAddModal = false;
     }
 
@@ -77,6 +79,7 @@ class Index extends Component
         ]);
 
         $ingredient = Ingredient::find($this->stockInIngredientId);
+        $before = (float) $ingredient->current_stock;
         $ingredient->increment('current_stock', $this->stockInQuantity);
 
         StockMovement::create([
@@ -87,7 +90,8 @@ class Index extends Component
             'notes' => $this->stockInNotes ?: 'Penerimaan barang'
         ]);
 
-        session()->flash('message', 'Stok masuk berhasil dicatat.');
+        session()->flash('message', 'Stok masuk sudah dicatat.');
+        ActivityLog::log('stock_in', $ingredient, ['current_stock' => $before], ['current_stock' => (float) $ingredient->current_stock]);
         $this->showStockInModal = false;
     }
 
@@ -138,10 +142,12 @@ class Index extends Component
                     'reference_id' => $opname->id,
                     'notes' => 'Penyesuaian stok opname: ' . ($difference > 0 ? '+' : '') . $difference
                 ]);
+
+                ActivityLog::log('stock_opname', $ingredient, ['current_stock' => $systemQty], ['current_stock' => $physicalQty]);
             }
         }
 
-        session()->flash('message', 'Proses Stok Opname berhasil disimpan.');
+        session()->flash('message', 'Proses Stok Opname sudah disimpan.');
         $this->showOpnameModal = false;
     }
 

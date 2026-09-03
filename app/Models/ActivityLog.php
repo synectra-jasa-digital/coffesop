@@ -23,4 +23,33 @@ class ActivityLog extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Record an audit entry for a critical data change.
+     *
+     * @param  string  $action    e.g. 'checkout', 'stock_in', 'opname', 'update_price'
+     * @param  \Illuminate\Database\Eloquent\Model|null  $model
+     * @param  array|null  $oldData
+     * @param  array|null  $newData
+     * @return static|null
+     */
+    public static function log(string $action, $model = null, array $oldData = null, array $newData = null)
+    {
+        if (! auth()->check()) {
+            return null;
+        }
+
+        $request = request();
+
+        return static::create([
+            'user_id' => auth()->id(),
+            'action' => $action,
+            'model_type' => $model ? get_class($model) : null,
+            'model_id' => $model ? $model->id : null,
+            'old_data' => $oldData,
+            'new_data' => $newData,
+            'ip_address' => $request ? $request->ip() : null,
+            'user_agent' => $request ? $request->userAgent() : null,
+        ]);
+    }
 }

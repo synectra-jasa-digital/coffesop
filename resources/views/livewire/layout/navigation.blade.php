@@ -110,10 +110,21 @@ new class extends Component
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
                     </svg>
-                    <span>{{ __('Inventori (Stok)') }}</span>
+<span>{{ __('Inventori (Stok)') }}</span>
                 </div>
             </x-responsive-nav-link>
-            @endhasanyrole
+            @endhasanyrole>
+
+            @hasanyrole('Manager/Supervisor|Owner/Admin')
+            <x-responsive-nav-link :href="route('admin.suppliers.index')" :active="request()->routeIs('admin.suppliers.index')" wire:navigate data-nav-link>
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 0A2.25 2.25 0 0 0 1.5 11.25v4.5A2.25 2.25 0 0 0 3.75 18h16.5a2.25 2.25 0 0 0 2.25-2.25v-4.5A2.25 2.25 0 0 0 20.25 9m-16.5 0V6a2.25 2.25 0 0 1 2.25-2.25h12a2.25 2.25 0 0 1 2.25 2.25v3" />
+                    </svg>
+                    <span>{{ __('Supplier') }}</span>
+                </div>
+            </x-responsive-nav-link>
+            @endhasanyrole>
 
             @hasanyrole('Manager/Supervisor|Owner/Admin')
             <x-responsive-nav-link :href="route('admin.reports.index')" :active="request()->routeIs('admin.reports.index')" wire:navigate data-nav-link>

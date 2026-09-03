@@ -25,7 +25,7 @@
 
             <x-ui.table :headers="['Waktu', 'No. Order', 'Tipe', 'Total', 'Status', 'Kasir', 'Aksi']">
                 @forelse($orders as $order)
-                <x-ui.table-row class="{{ $order->status === 'void' ? 'opacity-50 bg-gray-50' : '' }}">
+                <x-ui.table-row class="{{ $order->status === 'cancelled' ? 'opacity-50 bg-gray-50' : '' }}">
                     <x-ui.table-cell>{{ $order->created_at->format('H:i') }}</x-ui.table-cell>
                     <x-ui.table-cell class="font-bold">{{ $order->order_number }}</x-ui.table-cell>
                     <x-ui.table-cell>
@@ -38,7 +38,7 @@
                     <x-ui.table-cell>
                         @if($order->status === 'completed')
                             <x-ui.badge variant="success">Selesai</x-ui.badge>
-                        @elseif($order->status === 'void')
+                        @elseif($order->status === 'cancelled')
                             <x-ui.badge variant="danger">Void</x-ui.badge>
                         @else
                             <x-ui.badge variant="warning">{{ ucfirst($order->status) }}</x-ui.badge>
@@ -71,7 +71,7 @@
                     <h2 class="text-lg font-bold font-serif text-gray-900">{{ $selectedOrder->order_number }}</h2>
                     <p class="text-xs text-gray-500">{{ $selectedOrder->created_at->format('d M Y, H:i') }} • Kasir: {{ $selectedOrder->user->name ?? '-' }}</p>
                 </div>
-                @if($selectedOrder->status !== 'void')
+                @if($selectedOrder->status !== 'cancelled')
                     <x-ui.badge variant="success">Selesai</x-ui.badge>
                 @else
                     <x-ui.badge variant="danger">Void</x-ui.badge>
@@ -115,7 +115,7 @@
 
             <div class="flex justify-between pt-4 gap-3">
                 <div>
-                    @if($selectedOrder->status !== 'void' && auth()->user()->hasAnyRole(['Manager/Supervisor', 'Owner/Admin']))
+                    @if($selectedOrder->status !== 'cancelled')
                         <button wire:click="openVoid({{ $selectedOrder->id }})" class="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-sm font-semibold text-xs transition-colors">
                             Void Transaksi
                         </button>
@@ -123,7 +123,7 @@
                 </div>
                 <div class="flex gap-2">
                     <button type="button" wire:click="$set('showDetailModal', false)" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-sm font-semibold text-xs">Tutup</button>
-                    @if($selectedOrder->status !== 'void')
+                    @if($selectedOrder->status !== 'cancelled')
                         <x-ui.button class="!py-2 !px-4 !text-xs" onclick="window.print()">Cetak Ulang</x-ui.button>
                     @endif
                 </div>
@@ -140,10 +140,22 @@
             
             <form wire:submit="processVoid" class="space-y-4">
                 <div>
-                    <x-input-label for="voidNotes" value="Alasan Void (Wajib)" />
+                    <x-input-label for="voidNotes" value="Alasan Void (Wajib, min. 5 karakter)" />
                     <textarea id="voidNotes" wire:model="voidNotes" class="mt-1 block w-full border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-sm shadow-sm text-sm" rows="3" required></textarea>
                     <x-input-error :messages="$errors->get('voidNotes')" class="mt-2" />
                 </div>
+
+                <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-sm text-xs text-yellow-800">
+                    Void hanya dapat dilakukan oleh <strong>Manager/Supervisor</strong> atau <strong>Owner/Admin</strong>.
+                    Kasir perlu meminta <strong>approval Manager</strong> terlebih dahulu.
+                </div>
+
+                <div>
+                    <x-input-label for="voidManagerCode" value="Kode Manager (jika diperlukan)" />
+                    <x-text-input id="voidManagerCode" type="text" class="mt-1 block w-full" wire:model="voidManagerCode" placeholder="Kode approval Manager" />
+                    <x-input-error :messages="$errors->get('voidManagerCode')" class="mt-2" />
+                </div>
+
                 <div class="flex justify-end pt-4 gap-3">
                     <button type="button" wire:click="$set('showVoidModal', false)" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-sm font-semibold text-xs">Batal</button>
                     <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-sm font-semibold text-xs">Konfirmasi Void</button>

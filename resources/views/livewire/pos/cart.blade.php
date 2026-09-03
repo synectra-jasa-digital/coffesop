@@ -107,25 +107,40 @@
                 <span class="font-medium text-primary">- Rp {{ number_format($discountAmount, 0, ',', '.') }}</span>
             </div>
             @endif
-            <div class="pt-3 border-t border-line border-dashed flex justify-between items-end mt-2">
+            <div class="flex justify-between items-end mt-2">
                 <span class="font-serif font-bold text-lg text-ink">Total Bayar</span>
                 <span class="font-serif font-bold text-2xl text-primary">Rp {{ number_format($total, 0, ',', '.') }}</span>
             </div>
-        </div>
 
-        @php
-            $activeShift = \App\Models\Shift::where('user_id', auth()->id())->where('status', 'open')->exists();
-            $isDisabled = count($items) === 0 || ($orderType === 'dine-in' && empty($tableId)) || !$activeShift;
-        @endphp
+            @php
+                $activeShift = \App\Models\Shift::where('user_id', auth()->id())->where('status', 'open')->exists();
+                $isDisabled = count($items) === 0 || ($orderType === 'dine-in' && empty($tableId)) || !$activeShift;
+            @endphp
 
-        <button wire:click="processCheckout" class="w-full relative overflow-hidden bg-primary hover:bg-primary-hover text-white font-bold py-4 rounded-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/30 group {{ $isDisabled ? 'opacity-50 cursor-not-allowed' : '' }}" {{ $isDisabled ? 'disabled' : '' }}>
-            <div class="flex items-center justify-center gap-2">
-                <span>Konfirmasi Pembayaran</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 group-hover:translate-x-1 transition-transform">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                </svg>
+            @if($discountAmount > 0)
+            <div class="flex justify-between items-center mt-2 text-sm">
+                <span class="text-gray-500">Diskon</span>
+                <span class="font-medium text-primary flex items-center gap-2">
+                    - Rp {{ number_format($discountAmount, 0, ',', '.') }}
+                    <button wire:click="removeDiscount" class="text-gray-400 hover:text-red-500 text-xs">Hapus</button>
+                </span>
             </div>
-        </button>
+            @endif
+
+            <div class="flex gap-2 mt-4">
+                <button wire:click="openDiscountModal" class="flex-1 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-sm hover:bg-gray-50 transition-colors">
+                    + Diskon
+                </button>
+                <button wire:click="processCheckout" class="flex-2 relative overflow-hidden bg-primary hover:bg-primary-hover text-white font-bold py-2.5 rounded-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary/30 group {{ $isDisabled ? 'opacity-50 cursor-not-allowed' : '' }}" {{ $isDisabled ? 'disabled' : '' }}>
+                    <div class="flex items-center justify-center gap-2">
+                        <span>Konfirmasi</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4 group-hover:translate-x-1 transition-transform">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                        </svg>
+                    </div>
+                </button>
+            </div>
+        </div>
 
         @if(!$activeShift)
             <div class="mt-3 p-2 bg-red-50 text-red-600 rounded-sm flex items-center justify-center gap-2 border border-red-200 animate-fade-in-up">
@@ -139,4 +154,44 @@
             </div>
         @endif
     </div>
+
+    <!-- Discount Modal -->
+    <x-modal wire:model.live="showDiscountModal" maxWidth="sm" :show="$showDiscountModal">
+        <div class="p-6">
+            <h2 class="text-lg font-bold font-serif text-gray-900 mb-6">Diskon Manual</h2>
+
+            <form wire:submit="applyDiscount" class="space-y-4">
+                <div>
+                    <x-input-label for="discountValue" value="Nominal Diskon (Rp)" />
+                    <x-text-input id="discountValue" type="number" class="mt-1 block w-full" wire:model="discountValue" min="0.01" />
+                    <x-input-error :messages="$errors->get('discountValue')" class="mt-2" />
+                </div>
+
+                <div>
+                    <x-input-label for="discountNote" value="Alasan Diskon (Opsional)" />
+                    <x-text-input id="discountNote" type="text" class="mt-1 block w-full" wire:model="discountNote" placeholder="Contoh: repeat customer, promo" />
+                    <x-input-error :messages="$errors->get('discountNote')" class="mt-2" />
+                </div>
+
+                <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-sm text-xs text-yellow-800">
+                    Diskon di atas <strong>Rp {{ number_format(\App\Models\Setting::where('key', 'discount_auto_approval_limit')->value('value') ?? 10000, 0, ',', '.') }}</strong> memerlukan <strong>approval Manager</strong>.
+                </div>
+
+                <div>
+                    <x-input-label for="managerCode" value="Kode Manager (jika diperlukan)" />
+                    <x-text-input id="managerCode" type="text" class="mt-1 block w-full" wire:model="managerCode" placeholder="Kode approval Manager" />
+                    <x-input-error :messages="$errors->get('managerCode')" class="mt-2" />
+                </div>
+
+                <div class="flex justify-end mt-6 gap-3">
+                    <button type="button" wire:click="$set('showDiscountModal', false)" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-sm font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-50">
+                        Batal
+                    </button>
+                    <x-ui.button type="submit">
+                        Terapkan
+                    </x-ui.button>
+                </div>
+            </form>
+        </div>
+    </x-modal>
 </div>

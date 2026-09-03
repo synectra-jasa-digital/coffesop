@@ -118,9 +118,21 @@ return [
     |
     */
 
-    'maintenance' => [
+'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Discount Manager Code
+    |--------------------------------------------------------------------------
+    |
+    | Shared secret used by cashiers to request manager approval for manual
+    | discounts that exceed the configured auto-approval limit. In production
+    | this should be a per-user token or a real approval flow (e.g. an
+    | approval request that a Manager approves on their own device).
+    |
+    */
+    'discount_manager_code' => env('DISCOUNT_MANAGER_CODE', 'MANAGER123'),
 ];
