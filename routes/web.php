@@ -30,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
     // POS - Kasir, Manager, Owner
     Route::middleware(['role:Kasir|Manager/Supervisor|Owner/Admin'])->group(function () {
         Route::get('/pos', Terminal::class)->name('pos.index');
+        Route::get('/pos/receipt/{order}', [\App\Http\Controllers\ReceiptController::class, 'show'])->name('pos.receipt');
         Route::get('/pos/history', \App\Livewire\Pos\History::class)->name('pos.history');
     });
 

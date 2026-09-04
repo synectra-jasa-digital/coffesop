@@ -1,4 +1,9 @@
-<div class="h-full flex flex-col bg-white relative" x-data="{ printReceipt: false }">
+<div class="h-full flex flex-col bg-white relative" x-data="{ printReceipt: false }" @print-receipt.window="
+        const printWindow = window.open(`/pos/receipt/${$event.detail.order_id}`, '_blank');
+        if (printWindow) {
+            printWindow.onload = function() { printWindow.print(); };
+        }
+    ">
     <!-- Close Button (Mobile Only) -->
     <div class="lg:hidden absolute top-4 right-4 z-10" x-show="isCartOpen">
         <button @click="closeCart()" class="text-gray-500 hover:text-primary">

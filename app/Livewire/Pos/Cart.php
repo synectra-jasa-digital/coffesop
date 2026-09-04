@@ -356,7 +356,7 @@ class Cart extends Component
 
             DB::commit();
 
-            $this->dispatch('printReceipt', order_id: $order->id);
+            $this->dispatch('print-receipt', order_id: $order->id);
 
             $this->clearCart();
             $this->dispatch('orderCompleted', order_id: $order->id);
