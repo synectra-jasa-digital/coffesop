@@ -44,7 +44,7 @@
                             </svg>
                         </button>
 
-                        <div class="md:hidden font-serif font-bold text-xl text-primary">
+                        <div class="md:hidden font-bold text-xl text-primary">
                             Good Coffee.
                         </div>
                     </div>

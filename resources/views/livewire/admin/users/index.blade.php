@@ -61,7 +61,7 @@
     <!-- User Modal -->
     <x-modal wire:model.live="showModal" maxWidth="md" :show="$showModal">
         <div class="p-6">
-            <h2 class="text-lg font-bold font-serif text-gray-900 mb-6">
+            <h2 class="text-lg font-bold text-gray-900 mb-6">
                 {{ $isEditing ? 'Edit Pengguna' : 'Tambah Pengguna Baru' }}
             </h2>
 

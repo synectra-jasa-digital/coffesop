@@ -298,6 +298,7 @@ class CartCheckoutTest extends TestCase
     public function test_seeder_creates_user_with_password_using_settings_value(): void
     {
         $expected = Str::password(18);
+        $_ENV['SEED_ADMIN_PASSWORD'] = $expected;
         putenv('SEED_ADMIN_PASSWORD='.$expected);
 
         $this->artisan('db:seed', ['--class' => \Database\Seeders\RolesAndPermissionsSeeder::class])

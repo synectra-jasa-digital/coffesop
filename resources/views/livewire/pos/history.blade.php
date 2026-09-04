@@ -68,7 +68,7 @@
         <div class="p-6">
             <div class="flex justify-between items-start mb-6">
                 <div>
-                    <h2 class="text-lg font-bold font-serif text-gray-900">{{ $selectedOrder->order_number }}</h2>
+                    <h2 class="text-lg font-bold text-gray-900">{{ $selectedOrder->order_number }}</h2>
                     <p class="text-xs text-gray-500">{{ $selectedOrder->created_at->format('d M Y, H:i') }} • Kasir: {{ $selectedOrder->user->name ?? '-' }}</p>
                 </div>
                 @if($selectedOrder->status !== 'cancelled')
@@ -135,13 +135,13 @@
     <!-- Void Confirmation Modal -->
     <x-modal wire:model.live="showVoidModal" maxWidth="sm" :show="$showVoidModal">
         <div class="p-6">
-            <h2 class="text-lg font-bold font-serif text-gray-900 mb-2">Void Transaksi</h2>
+            <h2 class="text-lg font-bold text-gray-900 mb-2">Void Transaksi</h2>
             <p class="text-sm text-red-600 mb-4 font-medium">Tindakan ini akan membatalkan transaksi dan mengubah status laporan. Tindakan ini tidak dapat dikembalikan.</p>
             
             <form wire:submit="processVoid" class="space-y-4">
                 <div>
                     <x-input-label for="voidNotes" value="Alasan Void (Wajib, min. 5 karakter)" />
-                    <textarea id="voidNotes" wire:model="voidNotes" class="mt-1 block w-full border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-sm shadow-sm text-sm" rows="3" required></textarea>
+                    <textarea id="voidNotes" wire:model="voidNotes" class="mt-1 block w-full border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-sm text-sm" rows="3" required></textarea>
                     <x-input-error :messages="$errors->get('voidNotes')" class="mt-2" />
                 </div>
 

@@ -69,7 +69,7 @@
     <!-- Category Modal -->
     <x-modal wire:model.live="showCategoryModal" maxWidth="sm" :show="$showCategoryModal">
         <div class="p-6">
-            <h2 class="text-lg font-bold font-serif text-gray-900 mb-6">Form Kategori</h2>
+            <h2 class="text-lg font-bold text-gray-900 mb-6">Form Kategori</h2>
             <form wire:submit="saveCategory" class="space-y-4">
                 <div>
                     <x-input-label for="categoryName" value="Nama Kategori" />
@@ -91,7 +91,7 @@
     <!-- Table Modal -->
     <x-modal wire:model.live="showTableModal" maxWidth="sm" :show="$showTableModal">
         <div class="p-6">
-            <h2 class="text-lg font-bold font-serif text-gray-900 mb-6">Form Meja</h2>
+            <h2 class="text-lg font-bold text-gray-900 mb-6">Form Meja</h2>
             <form wire:submit="saveTable" class="space-y-4">
                 <div>
                     <x-input-label for="tableNumber" value="Nomor / Identitas Meja" />

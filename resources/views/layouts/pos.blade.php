@@ -20,7 +20,7 @@
                       <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                     </svg>
                 </a>
-                <div class="font-serif font-bold text-lg md:text-xl text-primary">Good Coffee.</div>
+                <div class="font-bold text-lg md:text-xl text-primary">Good Coffee.</div>
 
                 <livewire:pos.shift-manager />
 

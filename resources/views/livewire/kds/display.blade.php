@@ -7,7 +7,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                 </svg>
             </a>
-            <div class="font-serif font-bold text-xl text-primary">Kitchen Display</div>
+            <div class="font-bold text-xl text-primary">Kitchen Display</div>
         </div>
         <div class="flex gap-4">
             <!-- Badge Baru -->
@@ -28,7 +28,7 @@
         <div class="flex gap-6 h-full items-start">
             @forelse($activeOrders as $order)
                 <!-- Ticket Card -->
-                <div class="w-80 flex-shrink-0 flex flex-col max-h-full bg-white rounded-sm border-t-4 {{ $order->status === 'pending' ? 'border-red-500' : 'border-yellow-500' }} shadow-sm overflow-hidden animate-fade-in-up">
+                <div class="w-80 flex-shrink-0 flex flex-col max-h-full bg-white rounded-sm border border-line border-t-4 {{ $order->status === 'pending' ? 'border-t-red-500' : 'border-t-yellow-500' }} overflow-hidden animate-fade-in-up">
                     <!-- Header -->
                     <div class="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
                         <div>
@@ -55,11 +55,11 @@
                         @foreach($order->items as $item)
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <div class="font-bold">
+                                    <div class="font-bold text-lg text-gray-900">
                                         {{ $item->quantity }}x {{ $item->product->name ?? 'Produk Dihapus' }}
                                     </div>
                                     @if($item->notes)
-                                        <div class="text-sm text-gray-500 ml-4 border-l-2 border-gray-200 pl-2 mt-1">
+                                        <div class="text-base text-gray-600 ml-4 border-l-2 border-gray-300 pl-2 mt-1">
                                             {{ $item->notes }}
                                         </div>
                                     @endif

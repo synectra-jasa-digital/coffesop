@@ -1,12 +1,12 @@
 <div class="min-h-screen bg-gray-50" x-data="{ showCart: false }">
     <!-- Header -->
-    <header class="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
+    <header class="sticky top-0 z-30 bg-white border-b border-gray-200">
         <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
             <div>
                 <h1 class="font-serif font-bold text-xl text-[#398263]">Good Coffee.</h1>
                 <p class="text-xs text-gray-500">Meja {{ $tableNumber }} • Pesan Langsung</p>
             </div>
-            <button x-on:click="showCart = !showCart" class="relative bg-[#398263] text-white rounded-full w-11 h-11 flex items-center justify-center shadow-md">
+            <button x-on:click="showCart = !showCart" class="relative bg-[#398263] text-white rounded-full w-11 h-11 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                 </svg>
@@ -53,7 +53,7 @@
                 $filtered = $activeCategory === 'Semua' ? $products : $products->where('category.name', $activeCategory);
             @endphp
             @forelse($filtered as $product)
-            <button wire:click="addToCart({{ $product->id }})" class="bg-white rounded-sm border border-gray-200 overflow-hidden text-left hover:border-[#398263] hover:shadow-md transition-all">
+            <button wire:click="addToCart({{ $product->id }})" class="bg-white rounded-sm border border-gray-200 overflow-hidden text-left hover:border-[#398263] transition-all">
                 <div class="aspect-square bg-gray-100 overflow-hidden">
                     @if($product->image)
                         <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
@@ -76,7 +76,7 @@
 
     <!-- Cart Drawer -->
     <div x-show="showCart" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" class="fixed inset-0 bg-black/50 z-40" x-on:click="showCart = false"></div>
-    <div x-show="showCart" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white z-50 flex flex-col shadow-2xl">
+    <div x-show="showCart" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white z-50 flex flex-col border-l border-line">
         <div class="p-4 border-b border-gray-200 flex items-center justify-between">
             <h3 class="font-serif font-bold text-lg">Keranjang</h3>
             <button x-on:click="showCart = false" class="text-gray-500 hover:text-gray-700">

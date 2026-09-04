@@ -9,6 +9,7 @@
     
     $variants = [
         'primary' => 'bg-[#398263] hover:bg-[#2C6B4F] text-white px-8 py-3',
+        'danger' => 'bg-red-600 hover:bg-red-700 text-white px-8 py-3',
         'ghost' => 'bg-transparent border border-gray-300 hover:border-[#398263] hover:text-[#398263] text-gray-700 px-8 py-3',
         'outline' => 'bg-transparent border border-[#398263] text-[#398263] hover:bg-[#398263] hover:text-white px-8 py-3',
     ];

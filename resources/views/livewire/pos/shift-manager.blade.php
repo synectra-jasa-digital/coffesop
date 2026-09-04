@@ -17,7 +17,7 @@
     <!-- Open Shift Modal -->
     <x-modal wire:model.live="showOpenModal" maxWidth="md" :show="$showOpenModal" focusable>
         <div class="p-6">
-            <h2 class="text-lg font-bold font-serif text-gray-900 mb-4">
+            <h2 class="text-lg font-bold text-gray-900 mb-4">
                 Buka Shift Kasir
             </h2>
             <p class="text-sm text-gray-600 mb-6">
@@ -44,7 +44,7 @@
     <!-- Close Shift Modal -->
     <x-modal wire:model.live="showCloseModal" maxWidth="md" :show="$showCloseModal" focusable>
         <div class="p-6">
-            <h2 class="text-lg font-bold font-serif text-gray-900 mb-4">
+            <h2 class="text-lg font-bold text-gray-900 mb-4">
                 Tutup Shift Kasir
             </h2>
             
@@ -72,7 +72,7 @@
                 </div>
                 <div>
                     <x-input-label for="closingNotes" value="Catatan (Opsional)" />
-                    <textarea id="closingNotes" wire:model="closingNotes" class="mt-1 block w-full border-gray-300 focus:border-[#398263] focus:ring-[#398263] rounded-sm shadow-sm text-sm" rows="2" placeholder="Jelaskan jika ada selisih kas..."></textarea>
+                    <textarea id="closingNotes" wire:model="closingNotes" class="mt-1 block w-full border-gray-300 focus:border-[#398263] focus:ring-[#398263] rounded-sm text-sm" rows="2" placeholder="Jelaskan jika ada selisih kas..."></textarea>
                 </div>
             </div>
             @endif

@@ -86,7 +86,7 @@
     <!-- Product Modal -->
     <x-modal wire:model.live="showModal" maxWidth="md" :show="$showModal">
         <div class="p-6">
-            <h2 class="text-lg font-bold font-serif text-gray-900 mb-6">
+            <h2 class="text-lg font-bold text-gray-900 mb-6">
                 {{ $isEditing ? 'Edit Produk' : 'Tambah Produk Baru' }}
             </h2>
 
@@ -99,7 +99,7 @@
 
                 <div>
                     <x-input-label for="category_id" value="Kategori" />
-                    <select id="category_id" wire:model="category_id" class="mt-1 block w-full border-gray-300 focus:border-[#398263] focus:ring-[#398263] rounded-sm shadow-sm">
+                    <select id="category_id" wire:model="category_id" class="mt-1 block w-full border-gray-300 focus:border-[#398263] focus:ring-[#398263] rounded-sm">
                         <option value="">Pilih Kategori...</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat->id }}">{{ $cat->name }}</option>
@@ -116,7 +116,7 @@
 
                 <div>
                     <x-input-label for="description" value="Deskripsi (Opsional)" />
-                    <textarea id="description" wire:model="description" class="mt-1 block w-full border-gray-300 focus:border-[#398263] focus:ring-[#398263] rounded-sm shadow-sm text-sm" rows="3"></textarea>
+                    <textarea id="description" wire:model="description" class="mt-1 block w-full border-gray-300 focus:border-[#398263] focus:ring-[#398263] rounded-sm text-sm" rows="3"></textarea>
                 </div>
 
                 <div class="flex items-center mt-4">
@@ -139,7 +139,7 @@
     <!-- Variant Modal -->
     <x-modal wire:model.live="showVariantModal" maxWidth="md" :show="$showVariantModal">
         <div class="p-6">
-            <h2 class="text-lg font-bold font-serif text-gray-900 mb-6">
+            <h2 class="text-lg font-bold text-gray-900 mb-6">
                 {{ $variantId ? 'Edit Varian' : 'Curian Varian' }}
             </h2>
 

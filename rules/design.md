@@ -1,31 +1,75 @@
-name: Good Coffee Landing Page description: A premium, authentic, and modern editorial UI for a boutique coffee shop. colors: primary: "#398263" primary-hover: "#2C6B4F" background: "#FAFAFA" surface: "#FFFFFF" surface-dark: "#0A0A0A" text-primary: "#1A1A1A" text-secondary: "#6B7280" text-inverse: "#FFFFFF" border: "#E5E7EB" typography: h1: fontFamily: "Playfair Display, serif" fontSize: "4rem" fontWeight: 700 lineHeight: 1.1 letterSpacing: "-0.02em" h2: fontFamily: "Playfair Display, serif" fontSize: "2.5rem" fontWeight: 700 lineHeight: 1.2 h3: fontFamily: "Playfair Display, serif" fontSize: "1.75rem" fontWeight: 600 lineHeight: 1.3 body-md: fontFamily: "Inter, sans-serif" fontSize: "1rem" fontWeight: 400 lineHeight: 1.6 label-sm: fontFamily: "Inter, sans-serif" fontSize: "0.875rem" fontWeight: 500 rounded: none: "0px" sm: "2px" md: "4px" lg: "8px" full: "9999px" spacing: xs: "4px" sm: "8px" md: "16px" lg: "24px" xl: "48px" 2xl: "80px" 3xl: "120px" components: button-primary: backgroundColor: "{colors.primary}" textColor: "{colors.text-inverse}" rounded: "{rounded.sm}" padding: "12px 32px" fontWeight: 600 button-ghost: backgroundColor: "transparent" border: "1px solid {colors.text-inverse}" textColor: "{colors.text-inverse}" rounded: "{rounded.sm}" padding: "12px 32px" section: paddingTop: "{spacing.2xl}" paddingBottom: "{spacing.2xl}"
-Overview
-Desain ini menyampaikan kesan kedai kopi premium yang otentik dan membumi. Memadukan layout modern yang bersih dengan tipografi editorial (Serif) untuk menonjolkan kualitas dan keanggunan, serta warna Teal/Hijau klasik yang merepresentasikan biji kopi organik dan alam.
-Colors
+---
+name: Coffee Shop UI System
+description: Comprehensive design rules for Good Coffee, covering both the premium Landing Page (Persuade) and the robust internal system (Operate: POS, Admin, KDS).
+---
 
+# Good Coffee Design System
 
-Primary (#398263): Warna utama untuk CTA, aksen penting, dan background section untuk memecah layout agar tidak membosankan.
+## Overview
+This design system governs two distinct but unified modes:
+1. **Persuade (Customer-Facing/Landing Page):** A premium, authentic, and modern editorial UI. Highlights quality, organic beans, and elegance.
+2. **Operate (Internal System - POS, Admin, KDS, Shift):** A high-utility, fast, and legible interface for staff. Focused on task completion, scannability, and clear visual hierarchy under pressure.
 
-Background & Surface: Sangat mengandalkan kombinasi off-white dan pure white untuk memberikan ruang bernapas pada konten (generous whitespace).
-Typography
+---
 
+## 1. Persuade: The Premium Experience (Landing Page)
+**Goal:** Earn attention, action, and convey high-end quality.
 
-Menggunakan font pairing klasik: Serif (Playfair Display) untuk heading guna memberikan karakter "tulis/cetak" yang premium, dan Sans-serif (Inter) untuk body demi keterbacaan (readability) yang maksimal di layar digital.
-Spacing & Layout
+### Colors (Persuade)
+- **Primary:** `#398263` (Teal/Green). Used for CTAs and breaking up sections.
+- **Primary Hover:** `#2C6B4F`
+- **Background:** `#FAFAFA`
+- **Surface:** `#FFFFFF`
+- **Surface Dark:** `#0A0A0A`
+- **Text Primary:** `#1A1A1A`
+- **Text Secondary:** `#6B7280`
+- **Text Inverse:** `#FFFFFF`
+- **Border:** `#E5E7EB`
 
+### Typography (Persuade)
+- **Headings (Playfair Display, serif):**
+  - H1: 4rem, 700, 1.1 LH, -0.02em tracking
+  - H2: 2.5rem, 700, 1.2 LH
+  - H3: 1.75rem, 600, 1.3 LH
+- **Body & Labels (Inter, sans-serif):**
+  - Body: 1rem, 400, 1.6 LH
+  - Label: 0.875rem, 500
 
-Mengandalkan 12-column grid. Whitespace adalah kunci utama di desain ini. Jarak antar section minimal 80px-120px untuk memberikan kesan high-end dan tidak terburu-buru.
-Shapes & Elevation
+### Spacing & Elevation (Persuade)
+- **Generous Whitespace:** 80px - 120px between sections.
+- **Elevation:** Flat design. NO drop shadows. Depth achieved through solid color blocking.
+- **Shapes:** Sharp/Minimal (2px radius). Avoid pillowy/bubbly modern SaaS looks.
 
+---
 
-Flat design. Tidak menggunakan drop shadow. Kedalaman visual murni dicapai dengan memblok warna background (putih vs teal vs gelap) antar section.
+## 2. Operate: The Robust Staff System (Admin, POS, KDS)
+**Goal:** High density, rapid operation, flawless scannability.
 
-Radius sudut sangat kecil (2px) untuk memberikan kesan sedikit tajam dan raw, menghindari tampilan SaaS modern yang terlalu membulat (pillowy).
-Rules to Never Break
+### Colors (Operate)
+- Uses the same core palette but leans heavily on utilitarian grays.
+- **Action/Success:** `#398263` (Matches brand).
+- **Warning/Alert:** `#D97706` (Amber 600 - e.g., Low Stock).
+- **Danger/Destructive:** `#DC2626` (Red 600 - e.g., Cancel Order, Delete).
+- **Background (App):** `#F3F4F6` (Gray 100 - to make white cards pop slightly).
+- **Surface (Cards/Modals):** `#FFFFFF`
+- **Borders (Dividers/Tables):** `#E5E7EB`
 
+### Typography (Operate)
+- **Sans-serif only (Inter) for maximum legibility on busy screens.** No Playfair Display in the internal app unless it's a specific brand header.
+- **Data/Tables:** Tabular figures if possible. Small text (0.875rem) for dense tables.
+- **Hierarchy:** Clear distinction between data labels (gray, small, uppercase) and data values (black, medium/bold).
 
-Never gunakan drop shadow pada card atau tombol.
+### Layout, Spacing & Elevation (Operate)
+- **Density:** Higher density. Spacing uses smaller increments (4px, 8px, 16px, 24px) for menus, tables, and grids.
+- **Cards/Containers:** Simple 1px borders, subtle or no shadows (max shadow-sm) to distinguish active areas.
+- **Sidebar/Nav:** Clean, collapsible or fixed sidebar with clear active states.
+- **KDS (Kitchen Display System):** Must be readable from a distance. High contrast. Large card views for orders. Color-coded by status (New, Preparing, Ready).
 
-Never gunakan warna gradien. Tetap gunakan warna solid dan flat.
+---
 
-Always pertahankan whitespace yang luas; jangan memadatkan elemen teks atau gambar.
+## Universal Rules to Never Break
+1. **Never** use gradient backgrounds. Stick to solid and flat colors.
+2. **Never** use heavy, blurry drop shadows on marketing pages. Keep elements crisp.
+3. **Always** ensure high contrast for text (especially in POS and KDS where glare or distance is a factor).
+4. **Never** misalign numbers in tables (always right-align currency/numbers).
+5. **Form Controls:** Inputs in the Admin/POS must have clear, visible boundaries (1px solid border). No floating/underline-only inputs.

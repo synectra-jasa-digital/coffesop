@@ -29,7 +29,7 @@
 
     <!-- Order Header -->
     <div class="h-16 border-b border-line flex items-center justify-between px-4">
-        <div class="font-serif font-bold text-lg text-ink">Pesanan Baru</div>
+        <div class="font-bold text-lg text-ink">Pesanan Baru</div>
         <button wire:click="clearCart" class="text-danger hover:text-red-700 text-sm font-semibold transition-colors">Kosongkan</button>
     </div>
 
@@ -96,7 +96,7 @@
     </div>
 
     <!-- Checkout Summary -->
-    <div class="p-4 border-t border-line bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+    <div class="p-4 border-t border-line bg-white">
         <div class="space-y-2 mb-4">
             <div class="flex justify-between text-sm">
                 <span class="text-gray-500">Subtotal</span>
@@ -112,9 +112,9 @@
                 <span class="font-medium text-primary">- Rp {{ number_format($discountAmount, 0, ',', '.') }}</span>
             </div>
             @endif
-            <div class="flex justify-between items-end mt-2">
-                <span class="font-serif font-bold text-lg text-ink">Total Bayar</span>
-                <span class="font-serif font-bold text-2xl text-primary">Rp {{ number_format($total, 0, ',', '.') }}</span>
+            <div class="flex justify-between items-end mt-2 pt-2 border-t border-gray-100">
+                <span class="font-bold text-lg text-ink">Total Bayar</span>
+                <span class="font-bold text-2xl text-primary">Rp {{ number_format($total, 0, ',', '.') }}</span>
             </div>
 
             @php
@@ -184,7 +184,7 @@
     <!-- Discount Modal -->
     <x-modal wire:model.live="showDiscountModal" maxWidth="sm" :show="$showDiscountModal">
         <div class="p-6">
-            <h2 class="text-lg font-bold font-serif text-gray-900 mb-6">Diskon Manual</h2>
+            <h2 class="text-lg font-bold text-gray-900 mb-6">Diskon Manual</h2>
 
             <form wire:submit="applyDiscount" class="space-y-4">
                 <div>
@@ -224,13 +224,13 @@
     <!-- Payment / Split Payment Modal -->
     <x-modal wire:model.live="showPaymentModal" maxWidth="sm" :show="$showPaymentModal">
         <div class="p-6">
-            <h2 class="text-lg font-bold font-serif text-gray-900 mb-2">Tambah Pembayaran</h2>
+            <h2 class="text-lg font-bold text-gray-900 mb-2">Tambah Pembayaran</h2>
             <p class="text-sm text-gray-500 mb-6">Sisa tagihan: <strong class="text-primary">Rp {{ number_format($this->getRemainingProperty(), 0, ',', '.') }}</strong></p>
 
             <form wire:submit="addPayment" class="space-y-4">
                 <div>
                     <x-input-label for="paymentMethod" value="Metode Pembayaran" />
-                    <select id="paymentMethod" wire:model="paymentMethod" class="mt-1 block w-full border-gray-300 focus:border-[#398263] focus:ring-[#398263] rounded-sm shadow-sm">
+                    <select id="paymentMethod" wire:model="paymentMethod" class="mt-1 block w-full border-gray-300 focus:border-[#398263] focus:ring-[#398263] rounded-sm">
                         @foreach($paymentMethods as $pm)
                             <option value="{{ $pm['value'] }}">{{ $pm['label'] }}</option>
                         @endforeach

@@ -55,7 +55,7 @@
     <!-- Stock In Modal -->
     <x-modal wire:model.live="showStockInModal" maxWidth="md" :show="$showStockInModal">
         <div class="p-6">
-            <h2 class="text-lg font-bold font-serif text-gray-900 mb-6">Penerimaan Barang (Stok Masuk)</h2>
+            <h2 class="text-lg font-bold text-gray-900 mb-6">Penerimaan Barang (Stok Masuk)</h2>
             <form wire:submit="processStockIn" class="space-y-4">
                 <div>
                     <x-input-label for="stockInIngredientId" value="Bahan Baku" />
@@ -101,7 +101,7 @@
     <!-- Stock Opname Modal -->
     <x-modal wire:model.live="showOpnameModal" maxWidth="2xl" :show="$showOpnameModal">
         <div class="p-6">
-            <h2 class="text-lg font-bold font-serif text-gray-900 mb-6">Stok Opname (Penyesuaian Fisik)</h2>
+            <h2 class="text-lg font-bold text-gray-900 mb-6">Stok Opname (Penyesuaian Fisik)</h2>
             <form wire:submit="processOpname">
                 <div class="max-h-96 overflow-y-auto border border-gray-200 rounded-sm mb-4">
                     <table class="w-full text-sm text-left">
@@ -141,7 +141,7 @@
     <!-- Add Ingredient Modal -->
     <x-modal wire:model.live="showAddModal" maxWidth="sm" :show="$showAddModal">
         <div class="p-6">
-            <h2 class="text-lg font-bold font-serif text-gray-900 mb-6">Tambah Bahan Baku Baru</h2>
+            <h2 class="text-lg font-bold text-gray-900 mb-6">Tambah Bahan Baku Baru</h2>
             <form wire:submit="saveNewIngredient" class="space-y-4">
                 <div>
                     <x-input-label for="newIngName" value="Nama Bahan Baku" />

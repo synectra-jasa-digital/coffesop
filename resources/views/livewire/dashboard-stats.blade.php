@@ -15,25 +15,25 @@
         @hasanyrole('Manager/Supervisor|Owner/Admin')
         <div class="bg-white border border-line rounded-sm p-6 hover:border-primary transition-colors duration-200">
             <div class="text-sm text-gray-400 mb-2">Total Penjualan Hari Ini</div>
-            <h3 class="font-serif font-bold text-2xl md:text-3xl leading-[1.3] text-primary">Rp {{ number_format($totalSales, 0, ',', '.') }}</h3>
+            <h3 class="font-bold text-2xl md:text-3xl leading-[1.3] text-primary">Rp {{ number_format($totalSales, 0, ',', '.') }}</h3>
         </div>
         <div class="bg-white border border-line rounded-sm p-6 hover:border-primary transition-colors duration-200">
             <div class="text-sm text-gray-400 mb-2">Total Transaksi</div>
-            <h3 class="font-serif font-bold text-2xl md:text-3xl leading-[1.3] text-ink">{{ number_format($totalTransactions, 0, ',', '.') }}</h3>
+            <h3 class="font-bold text-2xl md:text-3xl leading-[1.3] text-ink">{{ number_format($totalTransactions, 0, ',', '.') }}</h3>
         </div>
         @endhasanyrole
 
         @hasanyrole('Barista/Gudang|Manager/Supervisor|Owner/Admin')
         <div class="bg-white border rounded-sm p-6 transition-colors duration-200 {{ $criticalStockCount > 0 ? 'border-red-300 bg-red-50/30 hover:border-red-400' : 'border-line hover:border-primary' }}">
             <div class="text-sm text-gray-400 mb-2">Stok Kritis (Bahan Baku)</div>
-            <h3 class="font-serif font-bold text-2xl md:text-3xl leading-[1.3] {{ $criticalStockCount > 0 ? 'text-red-600' : 'text-ink' }}">{{ $criticalStockCount }} Item</h3>
+            <h3 class="font-bold text-2xl md:text-3xl leading-[1.3] {{ $criticalStockCount > 0 ? 'text-red-600' : 'text-ink' }}">{{ $criticalStockCount }} Item</h3>
         </div>
         @endhasanyrole
 
         @hasanyrole('Kasir|Manager/Supervisor|Owner/Admin')
         <div class="bg-white border border-line rounded-sm p-6 hover:border-primary transition-colors duration-200">
             <div class="text-sm text-gray-400 mb-2">Status Kasir</div>
-            <h3 class="font-serif font-bold text-2xl md:text-3xl leading-[1.3] {{ $activeShift ? 'text-primary' : 'text-gray-400' }}">
+            <h3 class="font-bold text-2xl md:text-3xl leading-[1.3] {{ $activeShift ? 'text-primary' : 'text-gray-400' }}">
                 {{ $activeShift ? 'Shift Aktif' : 'Tutup' }}
             </h3>
             @if($activeShift)
@@ -52,7 +52,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         @hasanyrole('Manager/Supervisor|Owner/Admin')
         <div class="bg-white border border-line rounded-sm p-6">
-            <h4 class="font-serif font-bold text-lg md:text-xl leading-[1.4] text-ink mb-5">Menu Terlaris Hari Ini</h4>
+            <h4 class="font-bold text-lg md:text-xl leading-[1.4] text-ink mb-5">Menu Terlaris Hari Ini</h4>
             @if($topSelling->isEmpty())
                 <div class="text-gray-400 text-sm text-center py-10">Belum ada data transaksi hari ini.</div>
             @else
@@ -72,7 +72,7 @@
         @endhasanyrole
 
         <div class="bg-white border border-line rounded-sm p-6 {{ auth()->user()->hasRole('Kasir') || auth()->user()->hasRole('Barista/Gudang') ? 'md:col-span-2' : '' }}">
-            <h4 class="font-serif font-bold text-lg md:text-xl leading-[1.4] text-ink mb-5">Akses Cepat</h4>
+            <h4 class="font-bold text-lg md:text-xl leading-[1.4] text-ink mb-5">Akses Cepat</h4>
             <div class="flex flex-col sm:flex-row gap-3">
                 @hasanyrole('Kasir|Manager/Supervisor|Owner/Admin')
                 <a href="{{ route('pos.index') }}" wire:navigate class="inline-flex flex-1 items-center justify-center gap-2 font-semibold rounded-sm bg-primary hover:bg-primary-hover text-white px-6 py-3 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2">
