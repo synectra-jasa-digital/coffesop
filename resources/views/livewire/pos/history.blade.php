@@ -1,11 +1,11 @@
-<x-app-layout>
+<div>
     <x-slot name="header">
         <x-ui.heading level="2" class="text-xl">
             {{ __('Riwayat Transaksi') }}
         </x-ui.heading>
     </x-slot>
 
-    <x-ui.section spacing="py-6">
+    <x-ui.section spacing="py-6" wire:poll.10s>
         @if (session()->has('message'))
             <div class="mb-4 p-3 bg-green-100 border border-green-200 text-green-800 rounded-sm shadow-sm text-sm font-semibold flex justify-between">
                 <span>{{ session('message') }}</span>
@@ -163,4 +163,4 @@
             </form>
         </div>
     </x-modal>
-</x-app-layout>
+</div>

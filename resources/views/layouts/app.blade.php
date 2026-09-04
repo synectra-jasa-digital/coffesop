@@ -12,6 +12,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @livewireStyles
     </head>
     <body class="font-sans antialiased text-[#6B7280] bg-[#FAFAFA]" x-data="{ sidebarOpen: false }" @keydown.escape.window="sidebarOpen = false">
         <div class="min-h-screen flex">
@@ -34,9 +35,9 @@
             <livewire:layout.navigation />
 
             <!-- Main Content -->
-            <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-surface-alt">
                 <!-- Header -->
-                <header data-navbar-scroll class="bg-white border-b border-line h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 sticky top-0 z-30 transition-colors duration-300">
+                <header data-navbar-scroll class="bg-white/80 backdrop-blur-md border-b border-line/60 h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 sticky top-0 z-30 transition-all duration-300">
                     <div class="flex items-center gap-3">
                         <button @click="sidebarOpen = true" class="text-ink-secondary hover:text-primary p-2 -ml-2 md:hidden transition-colors" aria-label="Buka menu">
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -78,5 +79,6 @@
                 </main>
             </div>
         </div>
+        @livewireScripts
     </body>
 </html>

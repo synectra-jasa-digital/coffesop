@@ -1,4 +1,4 @@
-<x-app-layout>
+<div>
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <x-ui.heading level="2" class="text-xl">
@@ -94,4 +94,4 @@
             </form>
         </div>
     </x-modal>
-</x-app-layout>
+</div>

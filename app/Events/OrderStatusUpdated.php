@@ -4,7 +4,7 @@ namespace App\Events;
 
 use App\Models\Order;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class OrderStatusUpdated implements ShouldBroadcast
 {

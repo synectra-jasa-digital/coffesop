@@ -1,4 +1,4 @@
-<x-app-layout>
+<div>
     <x-slot name="header">
         <div class="flex items-center gap-4">
             <a href="{{ route('admin.products.index') }}" class="text-gray-500 hover:text-[#398263]">
@@ -83,4 +83,4 @@
             </div>
         </div>
     </x-ui.section>
-</x-app-layout>
+</div>

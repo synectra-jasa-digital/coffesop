@@ -1,5 +1,3 @@
-import './echo';
-
 /**
  * Global front-end interactivity for Good Coffee.
  * - Scroll reveal (IntersectionObserver) for elegant entrance motion

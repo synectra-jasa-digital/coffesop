@@ -297,9 +297,10 @@ class CartCheckoutTest extends TestCase
 
     public function test_seeder_creates_user_with_password_using_settings_value(): void
     {
+        // Kita akan melakukan config binding alih-alih bergantung penuh pada .env/putenv di seeder
         $expected = Str::password(18);
+        config(['app.seed_admin_password' => $expected]);
         $_ENV['SEED_ADMIN_PASSWORD'] = $expected;
-        putenv('SEED_ADMIN_PASSWORD='.$expected);
 
         $this->artisan('db:seed', ['--class' => \Database\Seeders\RolesAndPermissionsSeeder::class])
             ->assertExitCode(0);

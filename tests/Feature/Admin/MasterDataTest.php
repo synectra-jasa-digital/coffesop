@@ -41,7 +41,7 @@ class MasterDataTest extends TestCase
 
     public function test_admin_can_edit_existing_category()
     {
-        $category = Category::factory()->create(['name' => 'Old Name']);
+        $category = Category::create(['name' => 'Old Name', 'description' => 'Old Desc']);
 
         $this->actingAs($this->admin);
 

@@ -1,4 +1,4 @@
-<x-app-layout>
+<div>
     <x-slot name="header">
         <x-ui.heading level="2" class="text-xl">
             {{ __('Data Master') }}
@@ -112,4 +112,4 @@
             </form>
         </div>
     </x-modal>
-</x-app-layout>
+</div>

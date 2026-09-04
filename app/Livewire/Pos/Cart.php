@@ -71,21 +71,25 @@ class Cart extends Component
 
     public function incrementQuantity($index)
     {
-        $this->items[$index]['quantity']++;
-        $this->items[$index]['subtotal'] = $this->items[$index]['quantity'] * $this->items[$index]['price'];
-        $this->calculateTotals();
+        if (isset($this->items[$index])) {
+            $this->items[$index]['quantity']++;
+            $this->items[$index]['subtotal'] = $this->items[$index]['quantity'] * $this->items[$index]['price'];
+            $this->calculateTotals();
+        }
     }
 
     public function decrementQuantity($index)
     {
-        if ($this->items[$index]['quantity'] > 1) {
-            $this->items[$index]['quantity']--;
-            $this->items[$index]['subtotal'] = $this->items[$index]['quantity'] * $this->items[$index]['price'];
-        } else {
-            unset($this->items[$index]);
-            $this->items = array_values($this->items);
+        if (isset($this->items[$index])) {
+            if ($this->items[$index]['quantity'] > 1) {
+                $this->items[$index]['quantity']--;
+                $this->items[$index]['subtotal'] = $this->items[$index]['quantity'] * $this->items[$index]['price'];
+            } else {
+                unset($this->items[$index]);
+                $this->items = array_values($this->items);
+            }
+            $this->calculateTotals();
         }
-        $this->calculateTotals();
     }
 
     public function clearCart()

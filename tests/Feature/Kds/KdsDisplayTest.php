@@ -5,6 +5,7 @@ namespace Tests\Feature\Kds;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Table;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\OrderItem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -41,20 +42,31 @@ class KdsDisplayTest extends TestCase
 
     public function test_barista_can_access_kds_and_see_pending_orders()
     {
-        $table = Table::factory()->create(['number' => 'Meja 1']);
-        $product = Product::factory()->create(['name' => 'Americano']);
+        $table = Table::create(['number' => 'Meja 1', 'status' => 'available']);
+        $category = Category::create(['name' => 'Test Cat', 'description' => 'Test']);
+        $product = Product::create(['name' => 'Americano', 'category_id' => $category->id, 'price' => 15000, 'is_active' => true]);
 
         // Buat order pending
-        $order = Order::factory()->create([
+        $order = Order::create([
             'order_number' => 'ORD-001',
             'type' => 'dine-in',
             'table_id' => $table->id,
-            'status' => 'pending'
+            'subtotal' => 30000,
+            'tax_amount' => 0,
+            'service_charge_amount' => 0,
+            'discount_amount' => 0,
+            'total' => 30000,
+            'status' => 'pending',
+            'user_id' => $this->kasir->id,
         ]);
-        OrderItem::factory()->create([
+
+        OrderItem::create([
             'order_id' => $order->id,
             'product_id' => $product->id,
+            'name' => $product->name,
             'quantity' => 2,
+            'price' => 15000,
+            'subtotal' => 30000,
             'notes' => 'Less ice'
         ]);
 
@@ -71,7 +83,17 @@ class KdsDisplayTest extends TestCase
 
     public function test_barista_can_update_order_status_to_processing()
     {
-        $order = Order::factory()->create(['status' => 'pending']);
+        $order = Order::create([
+            'order_number' => 'ORD-002',
+            'type' => 'take-away',
+            'subtotal' => 0,
+            'tax_amount' => 0,
+            'service_charge_amount' => 0,
+            'discount_amount' => 0,
+            'total' => 0,
+            'status' => 'pending',
+            'user_id' => $this->kasir->id,
+        ]);
 
         $this->actingAs($this->barista);
 
@@ -84,7 +106,17 @@ class KdsDisplayTest extends TestCase
 
     public function test_completed_orders_disappear_from_kds()
     {
-        $order = Order::factory()->create(['status' => 'processing', 'order_number' => 'ORD-123']);
+        $order = Order::create([
+            'order_number' => 'ORD-123',
+            'type' => 'take-away',
+            'subtotal' => 0,
+            'tax_amount' => 0,
+            'service_charge_amount' => 0,
+            'discount_amount' => 0,
+            'total' => 0,
+            'status' => 'processing',
+            'user_id' => $this->kasir->id,
+        ]);
 
         $this->actingAs($this->barista);
 

@@ -25,7 +25,7 @@ class RolesAndPermissionsSeeder extends Seeder
         // (set in .env) so development/demo credentials stay usable; otherwise
         // generate a strong random one and print it. Never fall back to a weak,
         // hard-coded default such as "password123".
-        $seedPassword = env('SEED_ADMIN_PASSWORD') ?? $_ENV['SEED_ADMIN_PASSWORD'] ?? null;
+        $seedPassword = config('app.seed_admin_password') ?? env('SEED_ADMIN_PASSWORD') ?? $_ENV['SEED_ADMIN_PASSWORD'] ?? null;
 
         if (empty($seedPassword)) {
             $seedPassword = \Illuminate\Support\Str::password(18);

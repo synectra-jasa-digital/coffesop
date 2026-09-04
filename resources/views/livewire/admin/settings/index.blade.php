@@ -1,4 +1,4 @@
-<x-app-layout>
+<div>
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <x-ui.heading level="2" class="text-xl">
@@ -80,4 +80,4 @@
             </x-ui.card>
         </div>
     </x-ui.section>
-</x-app-layout>
+</div>

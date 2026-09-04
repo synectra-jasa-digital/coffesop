@@ -7,53 +7,39 @@
 
         <title>{{ config('app.name', 'Good Coffee.') }}</title>
 
-        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700|playfair-display:400,600,700&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @livewireStyles
     </head>
-    <body class="font-sans text-ink-secondary antialiased bg-[#FAFAFA]">
+    <body class="font-sans text-ink antialiased bg-white">
 
-        <!-- Hero stripe -->
-        <div class="fixed inset-0 -z-10 overflow-hidden">
-            <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary-light/50 rounded-full blur-3xl opacity-50"></div>
-            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl opacity-40"></div>
-        </div>
-
-        <div class="min-h-screen flex items-center justify-center py-12 px-4">
-            <div class="w-full max-w-md">
-                <!-- Card -->
-                <div class="bg-white border border-line rounded-sm p-10 shadow-none animate-scale-in">
-                    <div class="flex justify-center mb-8">
-                        <a href="/" wire:navigate class="font-serif font-bold text-3xl text-primary tracking-tight hover:text-primary-hover transition-colors">
-                            Good Coffee.
-                        </a>
-                    </div>
+        <div class="min-h-screen flex">
+            <!-- Form Side -->
+            <div class="w-full lg:w-1/2 flex flex-col justify-center px-8 sm:px-16 md:px-24 xl:px-32 relative z-10 bg-white">
+                <div class="w-full max-w-md mx-auto animate-fade-in-up">
+                    <!-- Brand -->
+                    <a href="/" wire:navigate class="font-serif font-bold text-3xl tracking-tight text-ink mb-12 block group">
+                        Good Coffee<span class="text-primary group-hover:text-primary-hover transition-colors">.</span>
+                    </a>
 
                     {{ $slot }}
                 </div>
+            </div>
 
-                <div class="mt-8 text-center text-sm text-gray-400">
-                    <p class="flex items-center justify-center gap-2">
-                        <span>&copy; {{ date('Y') }} Good Coffee POS System.</span>
-                    </p>
+            <!-- Image Side -->
+            <div class="hidden lg:block lg:w-1/2 relative bg-surface-alt">
+                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80" alt="Pouring coffee" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-ink/50 backdrop-blur-[1px]"></div>
+                <div class="absolute inset-0 flex flex-col justify-end p-16 animate-fade-in-up" style="animation-delay: 200ms">
+                    <h2 class="font-serif font-bold text-4xl text-white mb-4 leading-tight">Focus on the coffee.<br>We handle the rest.</h2>
+                    <p class="text-white/80 text-lg max-w-md">The unified operational engine for modern cafes, roasteries, and hospitality.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Animated coffee steam / background particles -->
-        <div class="fixed bottom-8 left-4 text-primary/5 pointer-events-none hidden sm:block">
-            <svg class="w-8 h-8 animate-pulse" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2.25c-4.24 0-7.75 3.25-8 7.5 0 3.36 2.29 6.16 5.36 6.84a.75.75 0 0 0 .94-.29 1.5 1.5 0 0 1 1.98-1.98 3 3 0 0 1 3.54.29.75.75 0 0 0 .97-.15 7.43 7.43 0 0 0 1.48-3.68c.25-1.22.37-2.47.35-3.72A7.96 7.96 0 0 0 12 2.25Z" />
-            </svg>
-        </div>
-        <div class="fixed bottom-24 right-6 text-primary/5 pointer-events-none hidden sm:block">
-            <svg class="w-6 h-6 animate-pulse" viewBox="0 0 24 24" fill="currentColor" style="animation-delay: 300ms">
-                <path d="M12 2.25c-4.24 0-7.75 3.25-8 7.5 0 3.36 2.29 6.16 5.36 6.84a.75.75 0 0 0 .94-.29 1.5 1.5 0 0 1 1.98-1.98 3 3 0 0 1 3.54.29.75.75 0 0 0 .97-.15 7.43 7.43 0 0 0 1.48-3.68c.25-1.22.37-2.47.35-3.72A7.96 7.96 0 0 0 12 2.25Z" />
-            </svg>
-        </div>
-
+        @livewireScripts
     </body>
 </html>
