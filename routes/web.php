@@ -11,6 +11,13 @@ use App\Livewire\Admin\Discounts\Index as AdminDiscountsIndex;
 
 Route::view('/', 'welcome');
 
+// Public QR Order Menu (no auth required).
+Route::get('/menu/{tableNumber}', \App\Livewire\Menu\DigitalMenu::class)->name('menu.show');
+
+// Payment gateway (simulation for development).
+Route::get('/payment/simulator/{order}/{method}/{gatewayId}', [\App\Http\Controllers\PaymentController::class, 'simulator'])->name('payment.simulator');
+Route::post('/payment/webhook/{order}', [\App\Http\Controllers\PaymentController::class, 'webhook'])->name('payment.webhook');
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

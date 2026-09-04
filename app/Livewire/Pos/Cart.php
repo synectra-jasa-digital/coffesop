@@ -14,6 +14,7 @@ use App\Models\ActivityLog;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Events\OrderCreated;
+use App\Services\PaymentMethodService;
 
 class Cart extends Component
 {
@@ -200,8 +201,10 @@ class Cart extends Component
      */
     public function addPayment()
     {
+        $enabledMethods = app(PaymentMethodService::class)->enabledMethods();
+
         $this->validate([
-            'paymentMethod' => 'required|in:cash,qris,ewallet,bank_transfer,card',
+            'paymentMethod' => 'required|in:' . implode(',', $enabledMethods),
             'paymentAmount' => 'required|numeric|min:0.01',
         ]);
 
@@ -380,6 +383,14 @@ class Cart extends Component
 
     public function render()
     {
-        return view('livewire.pos.cart');
+        $enabledMethods = app(PaymentMethodService::class)->enabledMethods();
+        $paymentMethods = array_map(
+            fn ($m) => ['value' => $m, 'label' => app(PaymentMethodService::class)->label($m)],
+            $enabledMethods
+        );
+
+        return view('livewire.pos.cart', [
+            'paymentMethods' => $paymentMethods,
+        ]);
     }
 }

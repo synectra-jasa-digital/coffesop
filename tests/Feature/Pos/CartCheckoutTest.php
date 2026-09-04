@@ -32,7 +32,6 @@ class CartCheckoutTest extends TestCase
     {
         parent::setUp();
 
-        // Seed roles required by the cart flow and policies.
         Role::firstOrCreate(['name' => 'Owner/Admin']);
         Role::firstOrCreate(['name' => 'Manager/Supervisor']);
         Role::firstOrCreate(['name' => 'Kasir']);
@@ -81,30 +80,52 @@ class CartCheckoutTest extends TestCase
         Setting::updateOrCreate(['key' => 'tax_percentage'], ['value' => '11', 'type' => 'number', 'group' => 'tax']);
     }
 
-    public function test_checkout_is_rejected_when_stock_is_insufficient_and_no_partial_state_remains(): void
+    /**
+     * Helper: create an open shift for the cashier.
+     */
+    protected function createOpenShift(): Shift
     {
-        $this->actingAs($this->cashier);
-
-        Shift::create([
+        return Shift::create([
             'user_id' => $this->cashier->id,
             'start_time' => Carbon::now(),
             'starting_cash' => 0,
             'status' => 'open',
         ]);
+    }
+
+    /**
+     * Helper: add a cash payment via the component.
+     */
+    protected function addCashPayment($component, float $amount)
+    {
+        return $component
+            ->call('openPaymentModal')
+            ->assertSet('showPaymentModal', true)
+            ->set('paymentMethod', 'cash')
+            ->set('paymentAmount', $amount)
+            ->call('addPayment');
+    }
+
+    public function test_checkout_is_rejected_when_stock_is_insufficient_and_no_partial_state_remains(): void
+    {
+        $this->actingAs($this->cashier);
+        $this->createOpenShift();
 
         $stockBefore = (float) $this->ingredient->fresh()->current_stock;
 
-        Livewire::test(\App\Livewire\Pos\Cart::class)
+        $component = Livewire::test(\App\Livewire\Pos\Cart::class)
             ->set('orderType', 'take-away')
             ->call('addToCart', [
                 'id' => $this->product->id,
                 'name' => $this->product->name,
                 'price' => (float) $this->product->price,
                 'image' => null,
-            ])
-            ->call('processCheckout');
+            ]);
 
-        // No order should be persisted, and stock must not have been mutated.
+        $this->addCashPayment($component, 30000);
+
+        $component->call('processCheckout');
+
         $this->assertDatabaseCount('orders', 0);
         $this->assertDatabaseCount('order_items', 0);
         $this->assertDatabaseCount('payments', 0);
@@ -116,23 +137,16 @@ class CartCheckoutTest extends TestCase
         );
     }
 
-public function test_checkout_succeeds_and_reads_tax_from_settings(): void
+    public function test_checkout_succeeds_and_reads_tax_from_settings(): void
     {
         $this->actingAs($this->cashier);
 
-        // Set the tax to 5% in settings and ensure the cart honours it.
         Setting::updateOrCreate(['key' => 'tax_enabled'], ['value' => 'true', 'type' => 'boolean', 'group' => 'tax']);
         Setting::updateOrCreate(['key' => 'tax_percentage'], ['value' => '5', 'type' => 'number', 'group' => 'tax']);
         Setting::updateOrCreate(['key' => 'service_charge_enabled'], ['value' => 'false', 'type' => 'boolean', 'group' => 'tax']);
 
         $this->ingredient->update(['current_stock' => 1000]);
-
-        Shift::create([
-            'user_id' => $this->cashier->id,
-            'start_time' => Carbon::now(),
-            'starting_cash' => 0,
-            'status' => 'open',
-        ]);
+        $this->createOpenShift();
 
         $component = Livewire::test(\App\Livewire\Pos\Cart::class)
             ->set('orderType', 'take-away')
@@ -143,12 +157,12 @@ public function test_checkout_succeeds_and_reads_tax_from_settings(): void
                 'image' => null,
             ]);
 
-        // subtotal = 25000, tax 5% = 1250, service charge disabled = 0, total = 26250
         $component->assertSet('subtotal', 25000)
             ->assertSet('taxAmount', 1250)
             ->assertSet('serviceChargeAmount', 0)
             ->assertSet('total', 26250);
 
+        $this->addCashPayment($component, 26250);
         $component->call('processCheckout');
 
         $this->assertDatabaseCount('orders', 1);
@@ -172,20 +186,13 @@ public function test_checkout_succeeds_and_reads_tax_from_settings(): void
     {
         $this->actingAs($this->cashier);
 
-        // Enable both tax (11%) and service charge (5%).
         Setting::updateOrCreate(['key' => 'tax_enabled'], ['value' => 'true', 'type' => 'boolean', 'group' => 'tax']);
         Setting::updateOrCreate(['key' => 'tax_percentage'], ['value' => '11', 'type' => 'number', 'group' => 'tax']);
         Setting::updateOrCreate(['key' => 'service_charge_enabled'], ['value' => 'true', 'type' => 'boolean', 'group' => 'tax']);
         Setting::updateOrCreate(['key' => 'service_charge_percentage'], ['value' => '5', 'type' => 'number', 'group' => 'tax']);
 
         $this->ingredient->update(['current_stock' => 1000]);
-
-        Shift::create([
-            'user_id' => $this->cashier->id,
-            'start_time' => Carbon::now(),
-            'starting_cash' => 0,
-            'status' => 'open',
-        ]);
+        $this->createOpenShift();
 
         $component = Livewire::test(\App\Livewire\Pos\Cart::class)
             ->set('orderType', 'take-away')
@@ -202,12 +209,90 @@ public function test_checkout_succeeds_and_reads_tax_from_settings(): void
             ->assertSet('serviceChargeAmount', 1250)
             ->assertSet('total', 29000);
 
+        $this->addCashPayment($component, 29000);
         $component->call('processCheckout');
 
         $order = \App\Models\Order::first();
         $this->assertSame(29000.0, (float) $order->total);
         $this->assertSame(2750.0, (float) $order->tax_amount);
         $this->assertSame(1250.0, (float) $order->service_charge_amount);
+    }
+
+    public function test_split_payment_allows_multiple_methods(): void
+    {
+        $this->actingAs($this->cashier);
+
+        Setting::updateOrCreate(['key' => 'tax_enabled'], ['value' => 'true', 'type' => 'boolean', 'group' => 'tax']);
+        Setting::updateOrCreate(['key' => 'tax_percentage'], ['value' => '11', 'type' => 'number', 'group' => 'tax']);
+        Setting::updateOrCreate(['key' => 'service_charge_enabled'], ['value' => 'false', 'type' => 'boolean', 'group' => 'tax']);
+
+        $this->ingredient->update(['current_stock' => 1000]);
+        $this->createOpenShift();
+
+        $component = Livewire::test(\App\Livewire\Pos\Cart::class)
+            ->set('orderType', 'take-away')
+            ->call('addToCart', [
+                'id' => $this->product->id,
+                'name' => $this->product->name,
+                'price' => (float) $this->product->price,
+                'image' => null,
+            ]);
+
+        // Total: subtotal 25000 + tax 11% = 2750 = 27750
+        $component->assertSet('total', 27750);
+
+        // Split: 10000 cash + 17750 via QRIS
+        $component->call('openPaymentModal')->assertSet('showPaymentModal', true);
+        $component->set('paymentMethod', 'cash')->set('paymentAmount', 10000)->call('addPayment');
+        $component->set('paymentMethod', 'qris')->set('paymentAmount', 17750)->call('addPayment');
+
+        // Verify payments array has both entries.
+        $component->assertSet('payments', [
+            ['method' => 'cash', 'amount' => 10000.0],
+            ['method' => 'qris', 'amount' => 17750.0],
+        ]);
+
+        $component->call('processCheckout');
+
+        $this->assertDatabaseCount('orders', 1);
+        $this->assertDatabaseCount('payments', 2);
+
+        $order = \App\Models\Order::first();
+        $cashPayment = \App\Models\Payment::where('order_id', $order->id)->where('payment_method', 'cash')->first();
+        $qrisPayment = \App\Models\Payment::where('order_id', $order->id)->where('payment_method', 'qris')->first();
+
+        $this->assertNotNull($cashPayment);
+        $this->assertNotNull($qrisPayment);
+        $this->assertSame(10000.0, (float) $cashPayment->amount);
+        $this->assertSame(17750.0, (float) $qrisPayment->amount);
+    }
+
+    public function test_checkout_rejects_when_payment_incomplete(): void
+    {
+        $this->actingAs($this->cashier);
+
+        Setting::updateOrCreate(['key' => 'tax_enabled'], ['value' => 'true', 'type' => 'boolean', 'group' => 'tax']);
+        Setting::updateOrCreate(['key' => 'tax_percentage'], ['value' => '0', 'type' => 'number', 'group' => 'tax']);
+        Setting::updateOrCreate(['key' => 'service_charge_enabled'], ['value' => 'false', 'type' => 'boolean', 'group' => 'tax']);
+
+        $this->ingredient->update(['current_stock' => 1000]);
+        $this->createOpenShift();
+
+        $component = Livewire::test(\App\Livewire\Pos\Cart::class)
+            ->set('orderType', 'take-away')
+            ->call('addToCart', [
+                'id' => $this->product->id,
+                'name' => $this->product->name,
+                'price' => (float) $this->product->price,
+                'image' => null,
+            ]);
+
+        // Total is 25000 but only pay 10000 cash.
+        $component->set('paymentMethod', 'cash')->set('paymentAmount', 10000)->call('addPayment');
+        $component->call('processCheckout');
+
+        // Should NOT create an order.
+        $this->assertDatabaseCount('orders', 0);
     }
 
     public function test_seeder_creates_user_with_password_using_settings_value(): void

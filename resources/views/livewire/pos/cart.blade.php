@@ -226,11 +226,9 @@
                 <div>
                     <x-input-label for="paymentMethod" value="Metode Pembayaran" />
                     <select id="paymentMethod" wire:model="paymentMethod" class="mt-1 block w-full border-gray-300 focus:border-[#398263] focus:ring-[#398263] rounded-sm shadow-sm">
-                        <option value="cash">Tunai (Cash)</option>
-                        <option value="qris">QRIS</option>
-                        <option value="ewallet">E-Wallet</option>
-                        <option value="bank_transfer">Transfer Bank</option>
-                        <option value="card">Kartu Debit/Kredit</option>
+                        @foreach($paymentMethods as $pm)
+                            <option value="{{ $pm['value'] }}">{{ $pm['label'] }}</option>
+                        @endforeach
                     </select>
                     <x-input-error :messages="$errors->get('paymentMethod')" class="mt-2" />
                 </div>
